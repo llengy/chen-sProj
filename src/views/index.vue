@@ -33,7 +33,7 @@
 </template>
 <script>
 import indexPage from '@/views/tabs/indexPage'
-import ordersPage from '@/views/tabs/ordersPage'
+import ordersPage from '@/views/categories/index'
 import userCenter from '@/views/tabs/userCenter'
 export default {
   components: {

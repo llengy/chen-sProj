@@ -65,13 +65,13 @@ export default {
       isRegister: false,
       checked: false,
       loginForm: {
-        tel: '13368342442',
+        tel: '15289918051',
         passwd: '123456'
       },
       registerForm: {
         userName: '',
         sex: '',
-        tel: '17789839459',
+        tel: '15289918051',
         smscode: '',
         passwd: ''
       }
@@ -123,7 +123,7 @@ export default {
             }
             this.smscodeT = this.randomNumStr
             get('/sendSMS',{
-              code: this.smscodeT,
+              codeT: this.smscodeT,
               mobile: this.registerForm.tel
             }).then(response => {
               if(response = true){
@@ -167,21 +167,27 @@ export default {
                 if (this.registerForm.passwd === ''){
                   alert("密码要输入哦");
                 } else {
-                  get("/register",{
-                    code: this.registerForm.smscode,
-                    usefulTime: this.time,
-                    codeT: this.smscodeT,
-                    cname:this.registerForm.userName,
-                    sex:this.registerForm.sex,
-                    mobile:this.registerForm.tel,
-                    password:this.registerForm.passwd
-                  }).then(response => {
+                  if(this.time > 0){
+                    get("/register",{
+                      code: this.registerForm.smscode,
+                      usefulTime: this.time,
+                      codeT: this.smscodeT,
+                      cname:this.registerForm.userName,
+                      sex:this.registerForm.sex,
+                      mobile:this.registerForm.tel,
+                      password:this.registerForm.passwd
+                    }).then(response => {
                       if(response !=0 ){
-                        alert("添加成功")
+                        alert("注册成功")
+                        this.$router.push({name: 'login'})
                       }else {
-                        alert("呜呜呜呜~")
+                        alert("注册失败")
                       }
-                  })
+                    })
+                  }else {
+                    alert("验证超时")
+                  }
+
                 }
               }
             }

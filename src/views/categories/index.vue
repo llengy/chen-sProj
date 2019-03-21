@@ -18,7 +18,7 @@
           </div>
           <div class="nav-content">
             <ul class="row">
-              <li class="item">1</li>
+              <li class="item" v-for="item in imgList">1</li>
               <li class="item">2</li>
               <li class="item">3</li>
             </ul>
