@@ -3,20 +3,12 @@ import router from '../router'
 import apiUrl from './api'
 import qs from 'qs'
 
-// const API = window.location.host === 'yqjsc.faw.cn' ? 'http://yqjsc.faw.cn/' : 'http://10.6.201.50:3690/'
-  // const API = 'http://yqjsc.faw.cn/'
-  // const API = 'http://localhost:8080/'
-  // const API = 'http://10.6.201.50:8088/' // 权限测试
-
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
 axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 axios.defaults.baseURL = apiUrl.baseURL
 
 
 // const USERINFO = store.getters.userInfo
-
-
-
 
 axios.defaults.withCredentials = true
 axios.defaults.timeout = 50 * 1000
