@@ -63,6 +63,8 @@ export default {
     next(vm => {
       if(vm.$router.currentRoute.params.sel) {
         vm.selected = vm.$router.currentRoute.params.sel
+      }else{
+        vm.selected = vm.categoryList[0].cat_no;
       }
     })
   },
@@ -78,7 +80,11 @@ export default {
       this.$http.post('/api/admin/cat/getCategoryList',{
       }).then(response =>{
         this.categoryList = response.data.rows;
-        this.selected = this.categoryList[0].cat_no;
+        if(this.$route.params.sel) {
+          this.selected = this.$route.params.sel
+        }else{
+          this.selected = this.categoryList[0].cat_no;
+        }
         this.getGoodsByCatNo();
     },response => {
         alert('找不到服务器!');
@@ -111,17 +117,6 @@ export default {
       }
     },
     handleSettle() {
-      // for(let i = 0;i<this.categoryList.length;i++){
-      //   for(let j = 0;j<this.goodsObj[this.categoryList[i].cat_no].length;j++){
-      //     if(this.goodsObj[this.categoryList[i].cat_no][j].total){
-      //
-      //     }
-      //   }
-      // }
-      // console.log(this.totalGoods);
-
-      // console.log(this.totalGoods);
-      // console.log(this.goodsObj);
       this.$router.push({
         name:'order',
         params:{

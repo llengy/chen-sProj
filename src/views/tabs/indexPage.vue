@@ -7,20 +7,14 @@
       <div class="content-title">
         <img src="../../assets/index-logo.png" alt="">
       </div>
-      <div class="flex-box category">
-        <div class="box-item" @click="goDetail('category', 'clothes')">
-          <img src="../../assets/cate01.png" alt="">
-        </div>
-        <div class="box-item" @click="goDetail('category', 'pants')">
-          <img src="../../assets/cate02.png" alt="">
+      <div class="flex-box category" >
+        <div class="box-item" @click="goDetail('category', cats.cat_no)" v-for="(cats,index) in categoies" :key="index"  v-if="index%2==0">
+          <img v-bind:src="cats.img_path">
         </div>
       </div>
-      <div class="flex-box category">
-        <div class="box-item" @click="goDetail('category', 'shoes')">
-          <img src="../../assets/cate03.png" alt="">
-        </div>
-        <div class="box-item" @click="goDetail('category', 'bags')">
-          <img src="../../assets/cate04.png" alt="">
+      <div class="flex-box category" >
+        <div class="box-item" @click="goDetail('category', cats.cat_no)" v-for="(cats,index) in categoies" :key="index"  v-if="index%2!=0">
+          <img v-bind:src="cats.img_path">
         </div>
       </div>
       <div class="flex-box tips">
@@ -89,9 +83,27 @@
 <script>
 export default {
   data() {
-    return {}
+    return {
+      categoies:'',
+    }
+  },
+  mounted:function () {
+    this.getCategories();
+    this.selected = this.$router.currentRoute.params.sel;
   },
   methods: {
+    /**
+     * 获取到所有分类
+     */
+    getCategories:function () {
+      this.$http.post('/api/admin/cat/getCategoryList',{
+      }).then(response =>{
+        this.categoies = response.data.rows;
+
+    },response => {
+        alert('找不到服务器!');
+      })
+    },
     goDetail(path, item) {
       this.$router.push({
         name: path,
