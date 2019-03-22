@@ -8,18 +8,18 @@
         <img src="../../assets/index-logo.png" alt="">
       </div>
       <div class="flex-box category">
-        <div class="box-item">
+        <div class="box-item" @click="goDetail('category', 'clothes')">
           <img src="../../assets/cate01.png" alt="">
         </div>
-        <div class="box-item">
+        <div class="box-item" @click="goDetail('category', 'pants')">
           <img src="../../assets/cate02.png" alt="">
         </div>
       </div>
       <div class="flex-box category">
-        <div class="box-item">
+        <div class="box-item" @click="goDetail('category', 'shoes')">
           <img src="../../assets/cate03.png" alt="">
         </div>
-        <div class="box-item">
+        <div class="box-item" @click="goDetail('category', 'bags')">
           <img src="../../assets/cate04.png" alt="">
         </div>
       </div>
@@ -92,8 +92,13 @@ export default {
     return {}
   },
   methods: {
-    goDetail(path) {
-      this.$router.push(path)
+    goDetail(path, item) {
+      this.$router.push({
+        name: path,
+        params: {
+          sel: item
+        }
+      })
     }
   }
 }

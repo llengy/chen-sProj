@@ -8,7 +8,7 @@
     <!-- 登录 -->
     <div class="login-form" v-show="tabIndex === 0">
       <div class="form-group">
-       <input type="text" class="form-control" placeholder="手机号" v-model="loginForm.tel">
+       <input type="text" class="form-control" placeholder="用户名" v-model="loginForm.userName">
       </div>
       <div class="form-group">
         <input type="password" class="form-control" placeholder="请输入密码" v-model="loginForm.passwd">
@@ -29,21 +29,11 @@
     <!-- 注册 -->
     <div class="register login-form" v-show="tabIndex === 1">
       <div class="form-group">
-        <input type="text" class="form-control" placeholder="请输入名称" v-model="registerForm.userName">
-      </div>
-      <div class="form-group">
-        <input class="sex-btn" type="radio" checked ="checked" name="sex" value="男" v-model="registerForm.sex"><label class="sex">男</label>
-        <input class="sex-btn" type="radio"  name="sex" value="女" v-model="registerForm.sex"><label class="sex" >女</label>
-      </div>
-      <div class="form-group">
        <input type="tel" class="form-control" placeholder="请输入手机号" v-model="registerForm.tel">
       </div>
       <div class="form-group">
         <input type="text" class="form-control" placeholder="请输入验证码" v-model="registerForm.smscode">
-        <span v-show="show" @click="getSMSCode" class="sms-btn">获取验证码</span>
-        <span v-show="!show" class="sms-btn">{{btntxt}}</span>
-        <!--<span @click="getSMSCode" class="sms-btn">{{btntxt}}</span>-->
-        <!--<button :disabled="disabled" @click="getSMSCode" class="sms-btn">{{btntxt}}</button>-->
+        <span @click="getSMSCode" class="sms-btn">获取验证码</span>
       </div>
       <div class="form-group">
         <input type="password" class="form-control" placeholder="请输入密码" v-model="registerForm.passwd">
@@ -53,26 +43,19 @@
   </main>
 </template>
 <script>
-import {post, get} from '../utils/http.js'
 export default {
   data () {
     return {
       tabIndex: 0,
-      time:0,
-      btntxt:"获取验证码",
-      // disabled: false,
-      show: true,
       isRegister: false,
       checked: false,
       loginForm: {
-        tel: '15289918051',
-        passwd: '123456'
+        userName: '',
+        passwd: ''
       },
       registerForm: {
-        userName: '',
-        sex: '',
-        tel: '15289918051',
-        smscode: '',
+        tel: '',
+        SMSCode: '',
         passwd: ''
       }
     }
@@ -89,131 +72,19 @@ export default {
       this.tabIndex = index
     },
     handleLogin() {
-      post('/login',{
-      mobile: this.loginForm.tel,
-        password: this.loginForm.passwd
-      }).then(response => {
-          if (response == true) {
-            alert('登录成功');
-            // this.$router.replace({path: '/index'})
-            this.$router.push({name: 'index'})
-          } else {
-            alert('账号密码错误!');
-          }
-      }, response => {
-        alert('找不到服务器!');
-      });
-      // this.$router.push({name: 'index', params: {sel: '我的'}})
+      this.$router.push({name: 'index', params: {sel: '我的'}})
     },
-
-    getSMSCode() {
-      if (this.registerForm.tel === '') {
-          alert("请输入手机号码")
-      } else {
-        if (!/^((1[3,5,8][0-9])|(14[5,7])|(17[0,6,7,8])|(19[7]))\d{8}$/.test(this.registerForm.tel)) {
-          alert("手机格式不正确");
-        } else {
-            //生成随机数
-            this.smscodeT = "";
-            this.length = 5;
-            this.randomNumStr = "";
-            for(this.i = 0; this.i < this.length;this.i++){
-              this.randomNum = Math.floor(Math.random() * 10);
-              this.randomNumStr += this.randomNum;
-            }
-            this.smscodeT = this.randomNumStr
-            get('/sendSMS',{
-              codeT: this.smscodeT,
-              mobile: this.registerForm.tel
-            }).then(response => {
-              if(response = true){
-              }
-            })
-          this.time=60;
-          this.show = false;
-          this.timer();
-        }
-      }
-    },
-
-    timer() {
-      if (this.time > 0) {
-        this.time--;
-        this.btntxt=this.time+"s后重新获取";
-        setTimeout(this.timer, 1000);
-      } else{
-        this.time=0;
-        this.btntxt="获取验证码";
-        this.show = true;
-      }
-    },
-
     handleRegister() {
-      if(this.registerForm.userName === ''){
-        alert("姓名要输入哦");
-      }else {
-        if(this.registerForm.sex === ''){
-          alert("要选性别哦");
-        }else {
-          if (this.registerForm.tel === '') {
-            alert("要输入手机号码哦")
-          } else {
-            if (!/^((1[3,5,8][0-9])|(14[5,7])|(17[0,6,7,8])|(19[7]))\d{8}$/.test(this.registerForm.tel)) {
-              alert("手机格式不正确");
-            } else {
-              if (this.registerForm.smscode === ''){
-                alert("验证码要输入哦");
-              } else {
-                if (this.registerForm.passwd === ''){
-                  alert("密码要输入哦");
-                } else {
-                  if(this.time > 0){
-                    get("/register",{
-                      code: this.registerForm.smscode,
-                      usefulTime: this.time,
-                      codeT: this.smscodeT,
-                      cname:this.registerForm.userName,
-                      sex:this.registerForm.sex,
-                      mobile:this.registerForm.tel,
-                      password:this.registerForm.passwd
-                    }).then(response => {
-                      if(response !=0 ){
-                        alert("注册成功")
-                        this.$router.push({name: 'login'})
-                      }else {
-                        alert("注册失败")
-                      }
-                    })
-                  }else {
-                    alert("验证超时")
-                  }
 
-                }
-              }
-            }
-          }
-        }
-      }
     },
-
-    // query(){
-    //   var formMess=this.formMess
-    //   Axios.post(api+"/order/select/reception", formMess)
-    //     .then(function (res) {
-    //       if(res.data.code==200){
-    //         console.log(res.data.data);
-    //         this.productResult=res.data.data;
-    //         this.productResult.length=3;
-    //       }else if(res.data.code==400){
-    //         alert(res.data.message)
-    //       }
-    //
-    //     }.bind(this))
-    // }
+    getSMSCode() {
+      alert(123)
+      alert(this.registerForm.tel)
+    }
   }
 }
 </script>
-<style lang="less"  type="text/less">
+<style lang="less" scoped>
 .login{
   height: 104%;
   overflow: hidden;
@@ -360,35 +231,9 @@ export default {
   }
   .register{
     transition: all .3s ease-in-out;
-    /*button_span{border:0;background-color:Transparent;}*/
-    button{
-      border: 1px;
-    }
-    label.sex{
-      opacity: 0.9;
-      font-size: 35px;
-      color: #FFFFFF;
-      letter-spacing: 50px;
-      margin-left: 15px;
-      text-align: center;
-      line-height: 30px;
-    }
-    .sex-btn{
-      display: flex;
-      margin-left: 45px;
-      opacity: 0.9;
-      width: 30px;
-      height: 30px;
-      font-size: 48px;
-      color: #FFFFFF;
-      text-align: center;
-      line-height: 64px;
-    }
     .cus-btn{
       margin-top: 45px;
-
     }
-
     .sms-btn{
       position: absolute;
       right: 30px;

@@ -5,6 +5,7 @@ import App from './App'
 import router from './router'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+import '@/utils/filters'
 import './main.css'
 import 'normalize.css'
 import {
@@ -24,9 +25,12 @@ import {
   SwipeItem,
   TabContainer,
   TabContainerItem,
-  Field
+  Field,
+  Loadmore,
+  DatetimePicker
 } from 'mint-ui'
 
+Vue.component(DatetimePicker.name, DatetimePicker)
 Vue.component(Cell.name, Cell)
 Vue.component(Checklist.name, Checklist)
 Vue.component(Toast.name, Toast)
@@ -43,10 +47,12 @@ Vue.component(Swipe.name, Swipe)
 Vue.component(SwipeItem.name, SwipeItem)
 Vue.component(TabContainer.name, TabContainer)
 Vue.component(TabContainerItem.name, TabContainerItem)
-Vue.component(Field.name, Field);
+Vue.component(Field.name, Field)
+Vue.component(Loadmore.name, Loadmore)
 
 Vue.config.productionTip = false
 Vue.use(VueAxios, axios)
+Vue.prototype.$ajax = axios
 
 
 /* 路有拦截 */

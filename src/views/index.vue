@@ -28,12 +28,12 @@
         我的
       </mt-tab-item>
     </mt-tabbar>
-    
+
   </main>
 </template>
 <script>
 import indexPage from '@/views/tabs/indexPage'
-import ordersPage from '@/views/categories/index'
+import ordersPage from '@/views/tabs/ordersPage'
 import userCenter from '@/views/tabs/userCenter'
 export default {
   components: {
@@ -48,16 +48,17 @@ export default {
   },
   beforeRouteEnter  (to, from, next) {
     next(vm => {
-      console.log(vm.$router.currentRoute, 54)
       if(vm.$router.currentRoute.params.sel) {
         vm.selected = vm.$router.currentRoute.params.sel
-        
       }
     })
+  },
+
+  methods:{
+
   }
 }
 </script>
-
 <style lang="less" scoped>
 .main{
   height: 100%;
@@ -80,7 +81,7 @@ export default {
     flex: 1;
     overflow: scroll;
     -webkit-overflow-scrolling: touch;
-    
+
     /deep/ .mint-tab-container-wrap{
       height: 100%;
     }

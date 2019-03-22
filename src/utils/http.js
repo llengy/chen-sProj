@@ -1,14 +1,16 @@
 import axios from 'axios'
 import router from '../router'
-import apiUrl from './api'
 import qs from 'qs'
 
-axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
-axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-axios.defaults.baseURL = apiUrl.baseURL
+const API = 'http://127.0.0.1/8080/'
+  // const API = 'http://yqjsc.faw.cn/'
+  // const API = 'http://10.65.36.122:3690/'
+  // const API = 'http://10.6.201.50:8088/' // 权限测试
 
 
-// const USERINFO = store.getters.userInfo
+
+const USERINFO = store.getters.userInfo
+
 
 axios.defaults.withCredentials = true
 axios.defaults.timeout = 50 * 1000
@@ -65,7 +67,7 @@ function checkCode(res) {
   //     msg: '系统错误，请稍后再试',
   //   })
   //   return false
-  // } 
+  // }
   else if (res && res.respcode === '0002') {
     // invalid token
     store.commit('dialogStatus', {
@@ -78,87 +80,53 @@ function checkCode(res) {
   return res
 }
 
- export default axios // 这句千万不能漏下！！！
-/**
- * post 方法封装
- * @param url
- * @param data
- * @returns {Promise}
- */
-export function post (url, data = {}) {
-  return new Promise((resolve, reject) => {
-    axios.post(url, qs.stringify(data))
-      .then(response => {
-        resolve(response.data)
-      }, err => {
-        reject(err)
-      })
-  })
+export default {
+  post(url, data = {}) {
+    store.commit('loadingStatus', true)
+    let postdata = data
+    postdata.token = localStorage.getItem('token') //USERINFO.token || '1234'
+    return axios({
+      method: 'post',
+      baseURL: API,
+      url,
+      data: qs.stringify(data),
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest',
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+      }
+    }).then(
+      (response) => {
+        store.commit('loadingStatus', false)
+        return checkStatus(response)
+      }
+    ).then(
+      (res) => {
+        // setTimeout(() => {
+        store.commit('loadingStatus', false)
+          // }, 1500)
+        return checkCode(res)
+      }
+    )
+  },
+  get(url, params) {
+    return axios({
+      method: 'get',
+      baseURL: API,
+      url,
+      params, // get 请求时带的参数
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest'
+      }
+    }).then(
+      (response) => {
+        return checkStatus(response)
+      }
+    ).then(
+      (res) => {
+        return checkCode(res)
+      }
+    )
+  },
+  API,
+  USERINFO
 }
-/**
- * get 方法封装
- * @param url
- * @param data
- * @returns {Promise}
- */
-export function get (url, data = {}) {
-  return new Promise((resolve, reject) => {
-    axios.get(url, {params: data})
-      .then(response => {
-        resolve(response.data)
-      }, err => {
-        reject(err)
-      })
-  })
-}
-
-// export default {
-//   post(url, data = {}) {
-//     store.commit('loadingStatus', true)
-//     let postdata = data
-//     postdata.token = localStorage.getItem('token') //USERINFO.token || '1234'
-//     return axios({
-//       method: 'post',
-//       baseURL: API,
-//       url,
-//       data: qs.stringify(data),
-//       headers: {
-//         'X-Requested-With': 'XMLHttpRequest',
-//         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-//       }
-//     }).then(
-//       (response) => {
-//         store.commit('loadingStatus', false)
-//         return checkStatus(response)
-//       }
-//     ).then(
-//       (res) => {
-//         // setTimeout(() => {
-//         store.commit('loadingStatus', false)
-//           // }, 1500)
-//         return checkCode(res)
-//       }
-//     )
-//   },
-//   get(url, params) {
-//     return axios({
-//       method: 'get',
-//       baseURL: API,
-//       url,
-//       params, // get 请求时带的参数
-//       headers: {
-//         'X-Requested-With': 'XMLHttpRequest'
-//       }
-//     }).then(
-//       (response) => {
-//         return checkStatus(response)
-//       }
-//     ).then(
-//       (res) => {
-//         return checkCode(res)
-//       }
-//     )
-//   },
-//   API,
-//   USERINFO
-// }

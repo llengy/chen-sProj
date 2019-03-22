@@ -33,6 +33,29 @@ export default new Router({
       name: 'category',
       component: () =>
         import ('@/views/categories/index')
+    },
+    {
+      path: '/address',
+      name: 'address',
+      component: () =>
+        import ('@/views/address/index')
+    },
+    {
+      path: '/addrModify',
+      name: 'addrModify',
+      component: () =>
+        import ('@/views/address/addAddress')
+    },
+    {
+      path: '/order',
+      name: 'order',
+      component: () =>
+        import ('@/views/order/index')
+    }, {
+      path: '/orderDetail',
+      name: 'orderDetail',
+      component: () =>
+        import ('@/views/order/orderDetail')
     }
   ]
 })
