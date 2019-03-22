@@ -4,6 +4,7 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import axios from 'axios'
+import qs from 'qs'
 import VueAxios from 'vue-axios'
 import '@/utils/filters'
 import './main.css'
@@ -51,8 +52,15 @@ Vue.component(Field.name, Field)
 Vue.component(Loadmore.name, Loadmore)
 
 Vue.config.productionTip = false
-Vue.use(VueAxios, axios)
-Vue.prototype.$ajax = axios
+var axios_instance = axios.create({
+  // baseURL:'http://localhost:8080', //自行修改url
+  transformRequest: [function (data) {
+    data = qs.stringify(data);
+    return data;
+  }],
+  headers:{'Content-Type':'application/x-www-form-urlencoded'}
+})
+Vue.use(VueAxios, axios_instance)
 
 
 /* 路有拦截 */

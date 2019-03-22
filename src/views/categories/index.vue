@@ -1,37 +1,16 @@
 <template>
   <main>
     <MyHeader :headers="headerParam"/>
-    <mt-navbar v-model="selected">
-      <mt-tab-item id="clothes">上衣</mt-tab-item>
-      <mt-tab-item id="pants">下装</mt-tab-item>
-      <mt-tab-item id="shoes">鞋履</mt-tab-item>
-      <mt-tab-item id="bags">箱包</mt-tab-item>
+    <mt-navbar v-model="selected" >
+      <mt-tab-item :id="cats.cat_no" v-for="(cats,index) in categoryList" :key="index">{{cats.cat_name}}</mt-tab-item>
     </mt-navbar>
     <div class="section">
       <mt-loadmore :top-method="loadTop" ref="loadmore">
         <mt-tab-container v-model="selected">
-          <!-- 上衣 -->
-          <mt-tab-container-item id="clothes">
+          <!--详情页-->
+          <mt-tab-container-item :id="cats.cat_no" v-for="(cats,index) in categoryList" :key="index">
             <div class="nav-content">
-              <FlexBox @add-to-cart="handleAdd" :data="types['clothes']" />
-            </div>
-          </mt-tab-container-item>
-          <!-- 下装 -->
-          <mt-tab-container-item id="pants">
-            <div class="nav-content">
-              <FlexBox @add-to-cart="handleAdd" :data="types['pants']" />
-            </div>
-          </mt-tab-container-item>
-          <!-- 鞋履 -->
-          <mt-tab-container-item id="shoes">
-          <div class="nav-content">
-              <FlexBox @add-to-cart="handleAdd" :data="types['shoes']" />
-            </div>
-          </mt-tab-container-item>
-          <!-- 箱包 -->
-          <mt-tab-container-item id="bags">
-          <div class="nav-content">
-              <FlexBox @add-to-cart="handleAdd" :data="types['bags']" />
+              <FlexBox @add-to-cart="handleAdd" :data="goodsObj[cats.cat_no]" />
             </div>
           </mt-tab-container-item>
         </mt-tab-container>
@@ -75,52 +54,9 @@ export default {
         path: 'index',
         tabname: '首页'
       },
-      selected: 'clothes',
+      selected: '',
       subAcitve: 0,
-      types: {
-        'clothes': [
-          {type: 'clothes', goods_name: '背心', img_path: require('../../assets/types/背心.png'), price: '19'},
-          {type: 'clothes', goods_name: 'T恤', img_path: require('../../assets/types/T恤.png'), price: '19'},
-          {type: 'clothes', goods_name: '皮衣', img_path: require('../../assets/types/皮衣.png'), price: '19'},
-          {type: 'clothes', goods_name: '单衬衫', img_path: require('../../assets/types/单衬衫.png'), price: '19'},
-          {type: 'clothes', goods_name: '马甲', img_path: require('../../assets/types/马甲.png'), price: '19'},
-          {type: 'clothes', goods_name: '毛衣', img_path: require('../../assets/types/毛衣.png'), price: '19'},
-          {type: 'clothes', goods_name: '棉服', img_path: require('../../assets/types/棉服.png'), price: '19'},
-          {type: 'clothes', goods_name: '卫衣', img_path: require('../../assets/types/卫衣.png'), price: '19'},
-          {type: 'clothes', goods_name: '西装外套', img_path: require('../../assets/types/西装外套.png'), price: '19'},
-          {type: 'clothes', goods_name: '羽绒服', img_path: require('../../assets/types/羽绒服.png'), price: '19'},
-          {type: 'clothes', goods_name: '针织衫', img_path: require('../../assets/types/针织衫.png'), price: '19'},
-          {type: 'clothes', goods_name: '真丝衬衫', img_path: require('../../assets/types/真丝衬衫.png'), price: '19'},
-        ],
-        'pants': [
-          {type: 'pants', goods_name: '半身裙', img_path: require('../../assets/types/半身裙.png'), price: '19'},
-          {type: 'pants', goods_name: '短裤', img_path: require('../../assets/types/短裤.png'), price: '19'},
-          {type: 'pants', goods_name: '西裤', img_path: require('../../assets/types/西裤.png'), price: '19'},
-          {type: 'pants', goods_name: '连体裤', img_path: require('../../assets/types/连体裤.png'), price: '19'},
-          {type: 'pants', goods_name: '连衣裙', img_path: require('../../assets/types/连衣裙.png'), price: '19'},
-          {type: 'pants', goods_name: '牛仔裤', img_path: require('../../assets/types/牛仔裤.png'), price: '19'},
-          {type: 'pants', goods_name: '休闲裤', img_path: require('../../assets/types/休闲裤.png'), price: '19'},
-          {type: 'pants', goods_name: '真丝裙', img_path: require('../../assets/types/真丝裙.png'), price: '19'},
-        ],
-        'bags': [
-          {type: 'bags', goods_name: '旅行包', img_path: require('../../assets/types/旅行包.png'), price: '19'},
-          {type: 'bags', goods_name: '钱包', img_path: require('../../assets/types/钱包.png'), price: '19'},
-          {type: 'bags', goods_name: '手拎包', img_path: require('../../assets/types/手拎包.png'), price: '19'},
-          {type: 'bags', goods_name: '手拿包', img_path: require('../../assets/types/手拿包.png'), price: '19'},
-          {type: 'bags', goods_name: '书包', img_path: require('../../assets/types/书包.png'), price: '19'},
-          {type: 'bags', goods_name: '双肩包', img_path: require('../../assets/types/双肩包.png'), price: '19'},
-          {type: 'bags', goods_name: '托特包', img_path: require('../../assets/types/托特包.png'), price: '19'},
-        ],
-        'shoes': [
-          {type: 'shoes', goods_name: '板鞋', img_path: require('../../assets/types/板鞋.png'), price: '19'},
-          {type: 'shoes', goods_name: '单鞋', img_path: require('../../assets/types/单鞋.png'), price: '19'},
-          {type: 'shoes', goods_name: '低帮帆布鞋', img_path: require('../../assets/types/低帮帆布鞋.png'), price: '19'},
-          {type: 'shoes', goods_name: '高帮帆布鞋', img_path: require('../../assets/types/高帮帆布鞋.png'), price: '19'},
-          {type: 'shoes', goods_name: '马丁靴', img_path: require('../../assets/types/马丁靴.png'), price: '19'},
-          {type: 'shoes', goods_name: '运动鞋', img_path: require('../../assets/types/运动鞋.png'), price: '19'},
-          {type: 'shoes', goods_name: '长筒靴', img_path: require('../../assets/types/长筒靴.png'), price: '19'},
-        ]
-      }
+      goodsObj:{}
     }
   },
   beforeRouteEnter (to, from, next) {
@@ -132,16 +68,31 @@ export default {
   },
   mounted:function () {
     this.getCategoryList();
+
   },
   methods: {
+    /**
+     * 获取到所有分类
+     */
     getCategoryList:function () {
-      this.$ajax.post('/api/admin/cat/getCategoryList',{
-
+      this.$http.post('/api/admin/cat/getCategoryList',{
       }).then(response =>{
         this.categoryList = response.data.rows;
+        this.selected = this.categoryList[0].cat_no;
+        this.getGoodsByCatNo();
     },response => {
         alert('找不到服务器!');
       })
+    },
+    getGoodsByCatNo:function () {
+      for(let i = 0; i <  this.categoryList.length; i++){
+        this.$http.post('/api/admin/goods/getGoodsList',{catNo:this.categoryList[i].cat_no}
+          ).then(response =>{
+          this.$set(this.goodsObj,this.categoryList[i].cat_no,response.data.rows);
+          },response=>{
+
+        })
+      }
     },
     activeTab(index) {
       this.subAcitve = index
@@ -151,17 +102,34 @@ export default {
     },
     handleAdd(item, index) {
       let total = 0
-      this.totalPrice += Number(this.types[item.type][index].price)
-      if(!this.types[item.type][index].total) {
-        this.$set(this.types[item.type][index], "total", 1)
+      this.totalPrice += Number(this.goodsObj[item.cat_no][index].price)
+      if(!this.goodsObj[item.cat_no][index].total) {
+        this.$set(this.goodsObj[item.cat_no][index], "total", 1)
       } else {
-        let total = this.types[item.type][index].total + 1
-        this.$set(this.types[item.type][index], "total", total)
+        let total = this.goodsObj[item.cat_no][index].total + 1
+        this.$set(this.goodsObj[item.cat_no][index], "total", total)
       }
-      console.log(this.types[item.type][index],121)
     },
     handleSettle() {
-      this.$router.push('/order')
+      // for(let i = 0;i<this.categoryList.length;i++){
+      //   for(let j = 0;j<this.goodsObj[this.categoryList[i].cat_no].length;j++){
+      //     if(this.goodsObj[this.categoryList[i].cat_no][j].total){
+      //
+      //     }
+      //   }
+      // }
+      // console.log(this.totalGoods);
+
+      // console.log(this.totalGoods);
+      // console.log(this.goodsObj);
+      this.$router.push({
+        name:'order',
+        params:{
+          totalPrice:this.totalPrice,
+          totalGoods:this.goodsObj,
+          categoryLists:this.categoryList
+        }
+      })
     }
   }
 }

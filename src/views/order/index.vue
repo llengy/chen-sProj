@@ -24,26 +24,12 @@
           <p class="title">洗涤明细</p>
           <div class="detail-box">
             <ul class="box-content">
-              <li class="box-item">
+              <li class="box-item" v-for="goods in detailGoods">
                 <p>
-                  <span>单衬衫</span>
-                  <span>x1</span>
+                  <span>{{goods.goods_name}}</span>
+                  <span>x{{goods.total}}</span>
                 </p>
-                <span>￥19</span>
-              </li>
-              <li class="box-item">
-                <p>
-                  <span>单衬衫</span>
-                  <span>x1</span>
-                </p>
-                <span>￥19</span>
-              </li>
-              <li class="box-item">
-                <p>
-                  <span>单衬衫</span>
-                  <span>x1</span>
-                </p>
-                <span>￥19</span>
+                <span>￥{{goods.total*goods.price}}</span>
               </li>
             </ul>
           </div>
@@ -73,7 +59,7 @@
       </mt-datetime-picker>
     </section>
     <div class="cus-btn">
-      <p class="pay-total">合计：￥57</p>
+      <p class="pay-total">合计：￥{{this.$route.params.totalPrice}}</p>
       <p class="pay">支付宝支付</p>
     </div>
   </main>
@@ -96,10 +82,26 @@ export default {
       startHour: 7,
       endHour: 23,
       startDate: new Date('2019'),
-      endDate: new Date('2019-03-26')
+      endDate: new Date('2019-03-26'),
+      detailGoods:[]
     }
   },
+  mounted:function () {
+    this.getDetails()
+  },
   methods: {
+    getDetails(){
+      let allGoods = this.$route.params.totalGoods;
+      let cats = this.$route.params.categoryLists;
+      for(let i = 0;i<cats.length;i++){
+        for(let j = 0;j<allGoods[cats[i].cat_no].length;j++){
+          if(allGoods[cats[i].cat_no][j].total){
+            this.detailGoods[this.detailGoods.length] = allGoods[cats[i].cat_no][j];
+          }
+        }
+      }
+      console.log(this.detailGoods);
+    },
     openPicker() {
       let end = this.formateDate(new Date().getTime() + 7 * 24 * 60 * 60 * 1000)
       this.endDate = new Date(end)
@@ -155,7 +157,7 @@ main{
     .flex-list{
       display: flex;
       flex-direction: column;
-      
+
       .list-item{
         box-sizing: border-box;
         position: relative;
@@ -249,7 +251,7 @@ main{
                   }
                 }
               }
-              
+
             }
           }
         }
@@ -297,7 +299,7 @@ main{
         color: rgba(42,164,133,1);
       }
     }
-    
+
   }
   .cus-btn{
     height: 95px;
