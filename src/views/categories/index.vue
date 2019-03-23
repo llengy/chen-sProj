@@ -87,9 +87,11 @@ export default {
       }
     })
   },
+  computed:{
+
+  },
   mounted:function () {
     this.getCategoryList();
-
   },
   methods: {
     /**

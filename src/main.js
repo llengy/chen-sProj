@@ -63,6 +63,7 @@ var axios_instance = axios.create({
   headers:{'Content-Type':'application/x-www-form-urlencoded'}
 })
 Vue.use(VueAxios, axios_instance)
+Vue.prototype.$toast = Toast;
 
 
 /* 路有拦截 */

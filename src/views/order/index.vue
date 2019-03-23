@@ -3,40 +3,44 @@
     <MyHeader :headers="headerParam"/>
     <section>
       <ul class="flex-list">
-        <li class="list-item address">
-          <div class="item-top">
-            <span>小陈</span>
-            <span>18858590000</span>
-          </div>
-          <p class="item-bottom">吉林省长春市绿园区西环城路与四联大街交汇处全季酒店</p>
-          <!-- <p>请选择地址</p> -->
-          <i class="cus-icon-arrow" @click="jump('address')"></i>
+        <li class="list-item address" @click="jump('address')">
+          <template v-if="address">
+            <div class="item-top">
+              <span>{{address.name}}</span>
+              <span>{{address.tel}}</span>
+            </div>
+            <p class="item-bottom">{{address.address}}</p>
+          </template>
+          <p v-else>请选择地址</p>
+          <i class="cus-icon-arrow"></i>
         </li>
         <li class="list-item store">
           <p>干洗门店 (自动分配)</p>
           <p>绿园一店</p>
         </li>
-        <li class="list-item" @click="openPicker">
+        <li class="list-item picker" @click="openPicker">
           <p>请选择取衣时间</p>
+          <p>{{pickTime}}</p>
           <i class="cus-icon-arrow"></i>
         </li>
         <li class="list-item order-detail">
           <p class="title">洗涤明细</p>
           <div class="detail-box">
             <ul class="box-content">
-              <li class="box-item" v-for="goods in detailGoods">
+              <li class="box-item" v-for="item in goods">
                 <p>
-                  <span>{{goods.goods_name}}</span>
-                  <span>x{{goods.total}}</span>
+                  <span>{{item.goods_name}}</span>
+                  <span>x{{item.total}}</span>
                 </p>
-                <span>￥{{goods.total*goods.price}}</span>
+                <span>￥{{item.total*item.price}}</span>
               </li>
             </ul>
           </div>
           <div class="order-total">
             <span>服务费：</span>
-            <span>￥19</span>
-            <span>￥0</span>
+            <span v-if="totalPrice > 50">￥10</span>
+            <span v-if="totalPrice > 50">￥{{serviceTip}}</span>
+            <p v-else>￥{{serviceTip}}</p>
           </div>
         </li>
         <li class="list-item comment">
@@ -59,7 +63,7 @@
       </mt-datetime-picker>
     </section>
     <div class="cus-btn">
-      <p class="pay-total">合计：￥{{this.$route.params.totalPrice}}</p>
+      <p class="pay-total">合计：￥{{totalPrice+serviceTip}}</p>
       <p @click="pay" class="pay">支付宝支付</p>
     </div>
   </main>
@@ -83,11 +87,30 @@ export default {
       endHour: 23,
       startDate: new Date('2019'),
       endDate: new Date('2019-03-26'),
-      detailGoods:[]
+      comment: '',
+      pickTime: '',
+      address: ''
     }
   },
-  mounted:function () {
-    this.getDetails()
+  computed: {
+    goods() {
+      return this.$store.state.shopCart.mycart
+    },
+    totalPrice() {
+      let sum = 0
+      this.goods.forEach(item => {
+        sum = sum + (item.total * item.price)
+      });
+      return sum
+    },
+    serviceTip() {
+      return this.totalPrice > 50 ? 0 : 10
+    }
+  },
+  mounted() {
+    if(this.$router.currentRoute.params.selectedAddress) {
+      this.address = this.$router.currentRoute.params.selectedAddress
+    }
   },
   methods: {
     pay(){
@@ -114,18 +137,6 @@ export default {
       }, response => {
         alert('找不到服务器!');
       });
-    },
-    getDetails(){
-      let allGoods = this.$route.params.totalGoods;
-      let cats = this.$route.params.categoryLists;
-      for(let i = 0;i<cats.length;i++){
-        for(let j = 0;j<allGoods[cats[i].cat_no].length;j++){
-          if(allGoods[cats[i].cat_no][j].total){
-            this.detailGoods[this.detailGoods.length] = allGoods[cats[i].cat_no][j];
-          }
-        }
-      }
-      console.log(this.detailGoods);
     },
     openPicker() {
       let end = this.formateDate(new Date().getTime() + 7 * 24 * 60 * 60 * 1000)
@@ -172,188 +183,217 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-main{
-  height: 100%;
-  section{
+  main{
     height: 100%;
-    padding: 30px;
-    margin-top: 80px;
-    background: #222222;
-    .flex-list{
-      display: flex;
-      flex-direction: column;
+    section{
+      height: 100%;
+      padding: 30px;
+      margin-top: 80px;
+      background: #222222;
+      .flex-list{
+        display: flex;
+        flex-direction: column;
 
-      .list-item{
-        box-sizing: border-box;
-        position: relative;
-        padding: 30px;
-        min-height: 88px;
-        background: rgba(59,59,59,0.7);
-        border-radius: 4px;
-        margin-bottom: 30px;
-        opacity: 0.6;
-        font-size: 35px;
-        color: #FFFFFF;
-        letter-spacing: 0;
-        .item-top{
-          margin-bottom: 20px;
-          span{
-            &:first-child{
-              margin-right: 53px;
+        .list-item{
+          box-sizing: border-box;
+          position: relative;
+          padding: 30px;
+          min-height: 88px;
+          background: rgba(59,59,59,0.7);
+          border-radius: 4px;
+          margin-bottom: 30px;
+          opacity: 0.6;
+          font-size: 35px;
+          color: #FFFFFF;
+          letter-spacing: 0;
+          .item-top{
+            margin-bottom: 20px;
+            span{
+              &:first-child{
+                margin-right: 53px;
+              }
+            }
+          }
+          .item-bottom{
+            font-size: 20px;
+            color: #FFFFFF;
+            letter-spacing: 0;
+          }
+          p{
+            font-size: 24px;
+            color: rgba(255,255,255,.8);
+            letter-spacing: 0;
+          }
+          .cus-icon-arrow{
+            display: inline-block;
+            position: absolute;
+            right: 30px;
+            top: 50%;
+            transform: translateY(-50%) rotate(45deg);
+            width: 10px;
+            height: 10px;
+            border-top: 3px solid #fff;
+            border-right: 3px solid #fff;
+          }
+        }
+        .store{
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          p{
+            &:nth-child(2) {
+              font-size: 24px;
+              color: #56CBAC;
+              letter-spacing: 0;
+              text-align: right;
             }
           }
         }
-        .item-bottom{
-          font-size: 20px;
+        .picker{
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          p{
+            &:nth-child(2) {
+              margin-right: 30px;
+            }
+          }
+        }
+        .address{
+          max-height: 144px;
+        }
+        .comment{
+          box-sizing: border-box;
+          textarea{
+            box-sizing: border-box;
+            padding: 0;
+            width: 100%;
+            font-size: 28px;
+            color: #FFFFFF;
+            letter-spacing: 0;
+            background: rgba(59,59,59,.7);
+            border: none;
+            ::-webkit-input-placeholder{
+              font-size: 28px;
+              color: #FFFFFF;
+            }
+          }
+        }
+        .order-detail{
+          // height: 342px;
+          padding: 20px 30px;
+          .title{
+            font-size: 24px;
+            color: rgba(255,255,255,.8);
+            letter-spacing: 0;
+            margin-bottom: 20px;
+          }
+          .detail-box{
+            box-sizing: border-box;
+            padding: 20px 40px;
+            min-height: 180px;
+            background: rgba(162,162,162,0.28);
+            border-radius: 4px;
+            .box-content{
+              display: flex;
+              flex-direction: column;
+              .box-item{
+                margin-bottom: 20px;
+                display: flex;
+                justify-content: space-between;
+                font-size: 24px;
+                color: #FFFFFF;
+                letter-spacing: 0;
+                &:last-child{
+                  margin-bottom: 0;
+                }
+                p{
+                  span{
+                    &:first-child{
+                      display: inline-block;
+                      width: 130px;
+                      margin-right: 45px;
+                    }
+                  }
+                }
+
+              }
+            }
+          }
+          .order-total{
+            margin-top: 30px;
+            display: flex;
+            justify-content: flex-end;
+            span{
+              line-height: 1;
+              &:nth-child(1){
+                font-size: 24px;
+                color: #FFFFFF;
+                letter-spacing: 0;
+              }
+              &:nth-child(2) {
+                font-size: 18px;
+                color: #FE5959;
+                letter-spacing: 0;
+                text-align: right;
+                text-decoration: line-through;
+                padding-top: 3px;
+              }
+              &:nth-child(3) {
+                font-size: 24px;
+                color: #FFFFFF;
+                letter-spacing: 0;
+                text-align: right;
+              }
+            }
+          }
+        }
+      }
+
+      .mint-datetime{
+        background: #3B3B3B;
+        /deep/ .picker-item{
+          font-size: 28px;
           color: #FFFFFF;
           letter-spacing: 0;
         }
-        p{
-          font-size: 24px;
-          color: rgba(255,255,255,.8);
-          letter-spacing: 0;
+        /deep/ .picker-selected{
+          color: rgba(42,164,133,1);
         }
-        .cus-icon-arrow{
-          display: inline-block;
-          position: absolute;
-          right: 30px;
-          top: 50%;
-          transform: translateY(-50%) rotate(45deg);
-          width: 10px;
-          height: 10px;
-          border-top: 3px solid #fff;
-          border-right: 3px solid #fff;
+        /deep/ .mint-datetime-action{
+          color: rgba(42,164,133,1);
         }
       }
-      .store{
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        p{
-          &:nth-child(2) {
-            font-size: 24px;
-            color: #56CBAC;
-            letter-spacing: 0;
-            text-align: right;
-          }
-        }
-      }
-      .address{
-        max-height: 144px;
-      }
-      .comment{
-        height: 144px;
-      }
-      .order-detail{
-        height: 342px;
-        padding: 20px 30px;
-        .title{
-          font-size: 24px;
-          color: rgba(255,255,255,.8);
-          letter-spacing: 0;
-          margin-bottom: 20px;
-        }
-        .detail-box{
-          box-sizing: border-box;
-          padding: 20px 40px;
-          height: 180px;
-          background: rgba(162,162,162,0.28);
-          border-radius: 4px;
-          .box-content{
-            display: flex;
-            flex-direction: column;
-            .box-item{
-              margin-bottom: 20px;
-              display: flex;
-              justify-content: space-between;
-              font-size: 24px;
-              color: #FFFFFF;
-              letter-spacing: 0;
-              p{
-                span{
-                  &:first-child{
-                    margin-right: 45px;
-                  }
-                }
-              }
 
-            }
-          }
-        }
-        .order-total{
-          margin-top: 30px;
-          display: flex;
-          justify-content: flex-end;
-          span{
-            line-height: 1;
-            &:nth-child(1){
-              font-size: 24px;
-              color: #FFFFFF;
-              letter-spacing: 0;
-            }
-            &:nth-child(2) {
-              font-size: 18px;
-              color: #FE5959;
-              letter-spacing: 0;
-              text-align: right;
-              text-decoration: line-through;
-              padding-top: 3px;
-            }
-            &:nth-child(3) {
-              font-size: 24px;
-              color: #FFFFFF;
-              letter-spacing: 0;
-              text-align: right;
-            }
-          }
-        }
-      }
     }
-
-    .mint-datetime{
-      background: #3B3B3B;
-      /deep/ .picker-item{
-        font-size: 28px;
+    .cus-btn{
+      height: 95px;
+      line-height: 95px;
+      position: fixed;
+      bottom: 0;
+      z-index: 2;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      .pay-total{
+        padding-left: 57px;
+        font-size: 35px;
         color: #FFFFFF;
         letter-spacing: 0;
+        background: #3B3B3B;
+        flex: 1;
       }
-      /deep/ .picker-selected{
-        color: rgba(42,164,133,1);
+      .pay{
+        width: 225px;
+        background: rgba(112,226,195,1);
+        font-size: 30px;
+        color: #FFFFFF;
+        letter-spacing: 0;
+        box-shadow: 0 7px 13px 0 rgba(0,0,0,0.28);
+        text-align: center;
       }
-      /deep/ .mint-datetime-action{
-        color: rgba(42,164,133,1);
-      }
-    }
-
-  }
-  .cus-btn{
-    height: 95px;
-    line-height: 95px;
-    position: fixed;
-    bottom: 0;
-    z-index: 2;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    .pay-total{
-      padding-left: 57px;
-      font-size: 35px;
-      color: #FFFFFF;
-      letter-spacing: 0;
-      background: #3B3B3B;
-      flex: 1;
-    }
-    .pay{
-      width: 225px;
-      background: rgba(112,226,195,1);
-      font-size: 30px;
-      color: #FFFFFF;
-      letter-spacing: 0;
-      box-shadow: 0 7px 13px 0 rgba(0,0,0,0.28);
-      text-align: center;
     }
   }
-}
 </style>
 
 

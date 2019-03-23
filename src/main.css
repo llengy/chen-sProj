@@ -45,3 +45,13 @@ main {
   color: #FFFFFF;
   letter-spacing: 0;
 }
+
+.mint-toast {
+  background: rgba(255, 255, 255, 1);
+  color: #333;
+}
+
+::-webkit-input-placeholder {
+  font-size: 28px;
+  color: #FFFFFF;
+}
