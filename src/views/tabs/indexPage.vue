@@ -1,8 +1,8 @@
 <template xmlns:v-bind="http://www.w3.org/1999/xhtml">
   <main class="main">
-    <div class="float-btn">
-      快速下单
-    </div>
+    <!--<div class="float-btn">-->
+      <!--快速下单-->
+    <!--</div>-->
     <div class="content">
       <div class="content-title">
         <img src="../../assets/index-logo.png" alt="">
@@ -98,7 +98,8 @@ export default {
     getCategories:function () {
       this.$http.post('/api/admin/cat/getCategoryList',{
       }).then(response =>{
-        this.categoies = response.data.rows;
+        this.categoies = response.data.data.rows;
+        // alert( response.data.data.rows)
 
     },response => {
         alert('找不到服务器!');

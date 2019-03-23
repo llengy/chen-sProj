@@ -6,6 +6,8 @@ import router from './router'
 import axios from 'axios'
 import qs from 'qs'
 import VueAxios from 'vue-axios'
+import store from '@/store/index'
+import ajax from '@/utils/http'
 import '@/utils/filters'
 import './main.css'
 import 'normalize.css'
@@ -79,6 +81,7 @@ router.afterEach((to, from) => {
 new Vue({
   el: '#app',
   router,
+  store,
   components: { App },
   template: '<App/>'
 })
