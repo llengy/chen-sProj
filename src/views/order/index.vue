@@ -60,7 +60,7 @@
     </section>
     <div class="cus-btn">
       <p class="pay-total">合计：￥{{this.$route.params.totalPrice}}</p>
-      <p class="pay">支付宝支付</p>
+      <p @click="pay" class="pay">支付宝支付</p>
     </div>
   </main>
 </template>
@@ -90,6 +90,31 @@ export default {
     this.getDetails()
   },
   methods: {
+    pay(){
+      this.$http.post('/api/jsp/alipay.trade.page.pay.jsp',{
+        //商户订单号
+        WIDout_trade_no: "123456789",
+        //订单名称
+        WIDsubject: "1",
+        //付款金额
+        WIDtotal_amount: "123",
+        //商品描述
+        WIDbody: "",
+      }).then(response => {
+
+        this.html = response.data
+        var form= response.data;
+        // console.log(url)
+
+        const div = document.createElement('div')
+        div.innerHTML = form//此处form就是后台返回接收到的数据
+        document.body.appendChild(div)
+        document.forms[0].submit()
+
+      }, response => {
+        alert('找不到服务器!');
+      });
+    },
     getDetails(){
       let allGoods = this.$route.params.totalGoods;
       let cats = this.$route.params.categoryLists;
