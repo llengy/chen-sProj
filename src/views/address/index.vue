@@ -7,13 +7,15 @@
     </mt-header>
     <section>
       <ul class="flex-list">
-        <li class="list-item" v-for="(item, index) in address" :key="index" @click="selectAddr(item)">
-          <div class="item-top">
-            <span>{{item.name}}</span>
-            <span>{{item.tel}}</span>
+        <li class="list-item" v-for="(item, index) in address" :key="index" >
+          <div @click="selectAddr(item)">
+            <div class="item-top" >
+              <span>{{item.recevier}}</span>
+              <span>{{item.mobile}}</span>
+            </div>
+            <p class="item-bottom" >{{item.address}}</p>
           </div>
-          <p class="item-bottom">{{item.address}}</p>
-          <i @click="goEdit" class="cus-icon-edit"></i>
+          <i @click="goEdit(item)" class="cus-icon-edit"></i>
         </li>
       </ul>
       <div class="btn-add">
@@ -37,11 +39,7 @@
           path: 'index',
           tabname: '首页'
         },
-        // address:[
-        //   {id: 0, name: '小陈', tel: 18858590000, address: '吉林省长春市绿园区西环城路与四联大街交汇处全季酒店'},
-        //   {id: 1, name: '小明', tel: 18858590000, address: '吉林省长春市绿园区西环城路与四联大街交汇处全季酒店'},
-        //   {id: 2, name: '小姜', tel: 18858590000, address: '吉林省长春市绿园区西环城路与四联大街交汇处全季酒店'}
-        // ]
+        address:[]
       }
     },
     beforeRouteEnter (to, from, next) {
@@ -49,12 +47,24 @@
         vm.headerParam.path = vm.$router.currentRoute.params.path
     })
     },
+    computed:{
+
+    },
+    mounted:function () {
+      this.getAddress();
+    },
     methods: {
       goBack() {
         this.$router.back(-1)
       },
-      goEdit() {
-        this.$router.push('addrModify')
+      goEdit(data) {
+        // this.$router.push('addrModify')
+        this.$router.push({
+          name: 'addrModify',
+          params: {
+            address: data
+          }
+        })
       },
       selectAddr(data) {
         this.$router.push({
@@ -62,6 +72,20 @@
           params: {
             selectedAddress: data
           }
+        })
+      },
+      getAddress(){
+        this.$http.post('/api/address/getCustAddress',{custId:this.$store.state.session.currentUser.cust_id}
+        ).then(response =>{
+          if(this.$global.successCode == response.data.code){
+          console.log(response.data.data.rows[0]);
+          this.address =  response.data.data.rows;
+        }else{
+          this.$toast(response.data.desc);
+          return null;
+        }
+      },response=>{
+          this.$toast('找不到服务器');
         })
       }
     }

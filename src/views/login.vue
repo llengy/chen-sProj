@@ -53,7 +53,11 @@
   </main>
 </template>
 <script>
+  import indexPage from '@/views/tabs/indexPage'
   export default {
+    components: {
+      indexPage,
+    },
     inject: ['reload'],
     data () {
       return {
@@ -94,16 +98,19 @@
           password: this.loginForm.passwd
         }).then(response => {
           if (this.$global.successCode == response.data.code) {
+            //登录成功将信息保存到sessionStorage
             sessionStorage.setItem("user",response.data.data);
             this.$store.commit('userStatus', response.data.data);
-            // console.log(this.$store.state.session.isLogin);
+            // console.log(this.$store.state.session.currentUser.cust_id);
+            //跳转首页
+            this.$router.push({name: 'index'})
           } else {
             this.$toast(response.data.desc);
           }
         }, response => {
           this.$toast('找不到服务器!');
         });
-        // this.$router.push({name: 'index', params: {sel: '我的'}})
+
       },
 
       getSMSCode() {

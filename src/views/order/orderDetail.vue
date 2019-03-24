@@ -9,35 +9,24 @@
             订单详情
           </div>
           <div class="box-content">
-            <p>订单编号: 10001</p>
+            <p>订单编号: {{order.order_id}}</p>
             <p>取件时间: 2019.04.01  08:00 - 09:00</p>
             <p>备注信息: 暂无备注</p>
-            <p>干洗门店: 绿园区一店</p>
+            <p>干洗门店: {{order.shop_name}}</p>
           </div>
         </div>
         <div class="flex-item order-detail">
-          <p class="box-title">洗涤明细</p>
+          <p class="box-title">
+            <i class="box-icon icon-note"></i>
+            洗涤明细
+          </p>
           <ul class="box-content">
-            <!-- <li class="box-item" v-for="(item, index) in goods" :key="index">
+            <li class="box-item" v-for="(item, index) in orderDetail" :key="index">
               <p>
-                <span>{{item.name}}</span>
-                <span>x{{item.count}}</span>
+                <span>{{item.goods_name}}</span>
+                <span>x{{item.number}}</span>
               </p>
-              <span>￥{{item.price | priceFilter}}</span>
-            </li> -->
-            <li class="box-item">
-              <p>
-                <span>单衬衫</span>
-                <span>x1</span>
-              </p>
-              <span>￥19</span>
-            </li>
-            <li class="box-item">
-              <p>
-                <span>单衬衫</span>
-                <span>x1</span>
-              </p>
-              <span>￥19</span>
+              <span>￥{{item.price * item.number | priceFilter}}</span>
             </li>
           </ul>
         </div>
@@ -49,55 +38,55 @@
           <div class="box-content">
             <ul class="flex timeline">
               <li class="timeline-item">
-                <i class="timeline-step"></i>
-                <span class="timeline-btn">待付款</span>
-                <p class="timeline-time">状态改变时间: 2019.04.01 08:40</p>
+                <i class="timeline-step"  :class="orderDetail[0].payDate ? 'check' : 'uncheck'"></i>
+                <span class="timeline-btn" :class="orderDetail[0].payDate ? 'check' : 'uncheck'">待付款</span>
+                <p class="timeline-time">状态改变时间: {{orderDetail[0].payDate}}</p>
               </li>
               <li class="timeline-item">
-                <i class="timeline-step"></i>
-                <span class="timeline-btn">待取衣</span>
-                <p class="timeline-time">状态改变时间: 2019.04.01 09:40</p>
+                <i class="timeline-step" :class="orderDetail[0].payDate ? 'check' : 'uncheck'"></i>
+                <span class="timeline-btn" :class="orderDetail[0].payDate ? 'check' : 'uncheck'">待取衣</span>
+                <p class="timeline-time">状态改变时间: {{orderDetail[0].payDate}}</p>
               </li>
               <li class="timeline-item">
-                <i class="timeline-step uncheck"></i>
-                <span class="timeline-btn uncheck">已取衣</span>
-                <p class="timeline-time">状态改变时间: </p>
+                <i class="timeline-step check" :class="orderDetail[0].takeDate ? 'check' : 'uncheck'"></i>
+                <span class="timeline-btn check" :class="orderDetail[0].takeDate ? 'check' : 'uncheck'">已取衣</span>
+                <p class="timeline-time">状态改变时间: {{orderDetail[0].takeDate}}</p>
               </li>
               <template v-if="isVisibale">
                 <li class="timeline-item">
-                  <i class="timeline-step uncheck"></i>
-                  <span class="timeline-btn uncheck">已送洗</span>
-                  <p class="timeline-time">状态改变时间: </p>
+                  <i class="timeline-step" :class="orderDetail[0].sendDate ? 'check' : 'uncheck'"></i>
+                  <span class="timeline-btn" :class="orderDetail[0].sendDate ? 'check' : 'uncheck'">已送洗</span>
+                  <p class="timeline-time">状态改变时间: {{orderDetail[0].sendDate}}</p>
                 </li>
                 <li class="timeline-item">
-                  <i class="timeline-step uncheck"></i>
-                  <span class="timeline-btn uncheck">清洗中</span>
-                  <p class="timeline-time">状态改变时间: </p>
+                  <i class="timeline-step" :class="orderDetail[0].washDate ? 'check' : 'uncheck'"></i>
+                  <span class="timeline-btn" :class="orderDetail[0].washDate ? 'check' : 'uncheck'">清洗中</span>
+                  <p class="timeline-time">状态改变时间: {{orderDetail[0].washDate}}</p>
                 </li>
                 <li class="timeline-item">
-                  <i class="timeline-step uncheck"></i>
-                  <span class="timeline-btn uncheck">已上挂</span>
-                  <p class="timeline-time">状态改变时间: </p>
+                  <i class="timeline-step" :class="orderDetail[0].hangDate ? 'check' : 'uncheck'"></i>
+                  <span class="timeline-btn" :class="orderDetail[0].hangDate ? 'check' : 'uncheck'">已上挂</span>
+                  <p class="timeline-time">状态改变时间: {{orderDetail[0].hangDate}}</p>
                 </li>
                 <li class="timeline-item">
-                  <i class="timeline-step uncheck"></i>
-                  <span class="timeline-btn uncheck">已领取</span>
-                  <p class="timeline-time">状态改变时间:</p>
+                  <i class="timeline-step" :class="orderDetail[0].receiveDate ? 'check' : 'uncheck'"></i>
+                  <span class="timeline-btn" :class="orderDetail[0].receiveDate ? 'check' : 'uncheck'">已领取</span>
+                  <p class="timeline-time">状态改变时间: {{orderDetail[0].receiveDate}}</p>
                 </li>
                 <li class="timeline-item">
-                  <i class="timeline-step uncheck"></i>
-                  <span class="timeline-btn uncheck">取回中</span>
-                  <p class="timeline-time">状态改变时间:</p>
+                  <i class="timeline-step" :class="orderDetail[0].takeBackDate ? 'check' : 'uncheck'"></i>
+                  <span class="timeline-btn" :class="orderDetail[0].takeBackDate ? 'check' : 'uncheck'">取回中</span>
+                  <p class="timeline-time">状态改变时间: {{orderDetail[0].takeBackDate}}</p>
                 </li>
                 <li class="timeline-item">
-                  <i class="timeline-step uncheck"></i>
-                  <span class="timeline-btn uncheck">待确认</span>
-                  <p class="timeline-time">状态改变时间: </p>
+                  <i class="timeline-step" :class="orderDetail[0].confirmDate ? 'check' : 'uncheck'"></i>
+                  <span class="timeline-btn" :class="orderDetail[0].confirmDate ? 'check' : 'uncheck'">待确认</span>
+                  <p class="timeline-time">状态改变时间: {{orderDetail[0].confirmDate}}</p>
                 </li>
                 <li class="timeline-item">
-                  <i class="timeline-step uncheck"></i>
-                  <span class="timeline-btn uncheck">待评价</span>
-                  <p class="timeline-time">状态改变时间: </p>
+                  <i class="timeline-step" :class="orderDetail[0].reviewDate ? 'check' : 'uncheck'"></i>
+                  <span class="timeline-btn" :class="orderDetail[0].reviewDate ? 'check' : 'uncheck'">待评价</span>
+                  <p class="timeline-time">状态改变时间: {{orderDetail[0].reviewDate}}</p>
                 </li>
               </template>
             </ul>
@@ -112,12 +101,12 @@
           </div>
           <div class="box-content">
             <div class="top flex">
-              <p>收件人: 小陈</p>
-              <p>18858590000</p>
+              <p>收件人: {{orderDetail[0].recevier}}</p>
+              <p>{{orderDetail[0].mobile}}</p>
             </div>
             <div class="bottom">
               <p>收货地址:</p>
-              <p>吉林省长春市绿园区西环城路与四联大街交汇处全季酒店</p>
+              <p>{{orderDetail[0].address}}</p>
             </div>
           </div>
         </div>
@@ -138,12 +127,38 @@
           path: 'index',
           tabname: '订单'
         },
-        isVisibale: false
+        isVisibale: false,
+        order:{},
+        orderDetail:[]
       }
+    },
+    computed:{
+
+    },
+    mounted() {
+      this.order = this.$router.currentRoute.params.selectedOrder;
+      this.getOrderDetail();
+
     },
     methods: {
       showMore() {
         this.isVisibale = !this.isVisibale
+      },
+      getOrderDetail(){
+        this.$http.post('/api/admin/order/getOrderDetail',{
+            orderId:this.order.order_id
+          }).then(response =>{
+          if(this.$global.successCode == response.data.code){
+          this.orderDetail = response.data.data.rows;
+          console.log(this.orderDetail);
+
+        }else{
+          this.$toast(response.data.desc);
+          return null;
+        }
+      },response=>{
+          this.$toast('找不到服务器');
+        })
       }
     }
   }

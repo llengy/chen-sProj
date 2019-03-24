@@ -6,8 +6,8 @@
         <li class="list-item address" @click="jump('address')">
           <template v-if="address">
             <div class="item-top">
-              <span>{{address.name}}</span>
-              <span>{{address.tel}}</span>
+              <span>{{address.recevier}}</span>
+              <span>{{address.mobile}}</span>
             </div>
             <p class="item-bottom">{{address.address}}</p>
           </template>
@@ -44,7 +44,7 @@
           </div>
         </li>
         <li class="list-item comment">
-          <p v-html="comment"></p>
+          <textarea class="cus-text" placeholder="备注（可不填写）" v-model="comment" rows="4"></textarea>
         </li>
       </ul>
       <mt-datetime-picker
@@ -81,7 +81,7 @@ export default {
         path: 'category',
         tabname: ''
       },
-      comment: '备注(可不填写)',
+      comment: '',
       pickerValue: new Date(),
       startHour: 7,
       endHour: 23,
@@ -114,6 +114,14 @@ export default {
   },
   methods: {
     pay(){
+      if(this.pickTime === '') {
+        this.$toast('请选择取衣时间')
+        return
+      }
+      if(this.address === '') {
+        this.$toast('请选择地址')
+        return
+      }
       this.$http.post('/api/jsp/alipay.trade.page.pay.jsp',{
         //商户订单号
         WIDout_trade_no: "123456789",
@@ -144,8 +152,8 @@ export default {
       this.$refs.picker.open()
     },
     handleSel(event) {
-      this.pickerValue = this.formateMins(event)
-      console.log(this.pickerValue)
+      this.pickTime = this.formateMins(event)
+      console.log(this.pickTime)
     },
     jump(path) {
       this.$router.push({

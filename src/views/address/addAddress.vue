@@ -10,7 +10,7 @@
       <mt-field label="联系人：" placeholder=" 请填写收货人的姓名" type="text" v-model="username"></mt-field>
       <mt-field label="联系方式：" placeholder=" 请填写收货人的手机号码" type="tel" v-model="phone"></mt-field>
     </div>
-    <div class="btn">
+    <div class="btn" @click="saveAddress">
       保存地址
     </div>
   </main>
@@ -23,11 +23,60 @@
     },
     data () {
       return {
+        address:'',
+        username:'',
+        phone:''
+      }
+    },
+    mounted:function () {
+      if(this.$router.currentRoute.params.address){
+        this.address = this.$router.currentRoute.params.address.address;
+        this.username = this.$router.currentRoute.params.address.recevier;
+        this.phone = this.$router.currentRoute.params.address.mobile;
       }
     },
     methods: {
       goBack() {
         this.$router.back(-1)
+      },
+      saveAddress(){
+        // this.$store.commit('userStatus', sessionStorage.getItem("user"));
+        // console.log(this.$store.state.session.currentUser.cust_id);
+        let param = {
+          custId:this.$store.state.session.currentUser.cust_id,
+          address:this.address,
+          mobile:this.phone,
+          recevier:this.username,
+          addressId:this.$router.currentRoute.params.address.address_id
+        }
+        if(this.$router.currentRoute.params.address){
+          this.$http.post('/api/address/update',param
+          ).then(response =>{
+
+            if(this.$global.successCode == response.data.code){
+              this.$toast('修改成功');
+              this.$router.back(-1);
+            }else{
+              this.$toast(response.data.desc);
+            }
+        },response=>{
+            this.$toast('找不到服务器');
+          })
+        }else{
+          this.$http.post('/api/address/add',param
+          ).then(response =>{
+            if(this.$global.successCode == response.data.code){
+              this.$toast('添加成功');
+              this.$router.back(-1);
+            }else{
+              this.$toast(response.data.desc);
+            }
+        },response=>{
+            this.$toast('找不到服务器');
+          })
+
+        }
+
       }
     }
   }
