@@ -108,7 +108,7 @@ export default {
         }
         this.getGoodsByCatNo();
     },response => {
-        alert('找不到服务器!');
+        this.$toast('找不到服务器!')
       })
     },
     getGoodsByCatNo:function () {

@@ -135,7 +135,7 @@ export default {
         document.forms[0].submit()
 
       }, response => {
-        alert('找不到服务器!');
+        this.$toast('找不到服务器!');
       });
     },
     openPicker() {

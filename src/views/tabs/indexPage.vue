@@ -102,7 +102,7 @@ export default {
         // alert( response.data.data.rows)
 
     },response => {
-        alert('找不到服务器!');
+        this.$toast('找不到服务器!');
       })
     },
     goDetail(path, item) {

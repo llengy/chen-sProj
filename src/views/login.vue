@@ -65,13 +65,13 @@
         isRegister: false,
         checked: false,
         loginForm: {
-          tel: '15289918051',
-          passwd: '123456'
+          tel: '',
+          passwd: ''
         },
         registerForm: {
           userName: '',
           sex: '',
-          tel: '15289918051',
+          tel: '',
           smscode: '',
           passwd: ''
         }
@@ -93,25 +93,25 @@
           mobile: this.loginForm.tel,
           password: this.loginForm.passwd
         }).then(response => {
-          if (response.data == true) {
-            alert('登录成功');
-            // this.$router.replace({path: '/index'})
-            this.$router.push({name: 'index',params: {customer : response.data }})
+          if (this.$global.successCode == response.data.code) {
+            sessionStorage.setItem("user",response.data.data);
+            this.$store.commit('userStatus', response.data.data);
+            // console.log(this.$store.state.session.isLogin);
           } else {
-            alert('账号密码错误!');
+            this.$toast(response.data.desc);
           }
         }, response => {
-          alert('找不到服务器!');
+          this.$toast('找不到服务器!');
         });
         // this.$router.push({name: 'index', params: {sel: '我的'}})
       },
 
       getSMSCode() {
         if (this.registerForm.tel === '') {
-          alert("请输入手机号码")
+          this.$toast("请输入手机号码")
         } else {
           if (!/^((1[3,5,8][0-9])|(14[5,7])|(17[0,6,7,8])|(19[7]))\d{8}$/.test(this.registerForm.tel)) {
-            alert("手机格式不正确");
+            this.$toast("手机格式不正确");
           } else {
             //生成随机数
             this.smscodeT = "";
@@ -131,7 +131,7 @@
                 this.show = false;
                 this.timer();
               }else {
-                alert("发送验证失败")
+                this.$toast("发送验证失败")
               }
             })
 
@@ -153,22 +153,22 @@
 
       handleRegister() {
         if(this.registerForm.userName === ''){
-          alert("姓名要输入哦");
+          this.$toast("姓名要输入哦");
         }else {
           if(this.registerForm.sex === ''){
-            alert("要选性别哦");
+            this.$toast("要选性别哦");
           }else {
             if (this.registerForm.tel === '') {
-              alert("要输入手机号码哦")
+              this.$toast("要输入手机号码哦")
             } else {
               if (!/^((1[3,5,8][0-9])|(14[5,7])|(17[0,6,7,8])|(19[7]))\d{8}$/.test(this.registerForm.tel)) {
-                alert("手机格式不正确");
+                this.$toast("手机格式不正确");
               } else {
                 if (this.registerForm.smscode === ''){
-                  alert("验证码要输入哦");
+                  this.$toast("验证码要输入哦");
                 } else {
                   if (this.registerForm.passwd === ''){
-                    alert("密码要输入哦");
+                    this.$toast("密码要输入哦");
                   } else {
                     if(this.time > 0){
                       this.$http.post("/api/register",{
@@ -181,14 +181,14 @@
                         password:this.registerForm.passwd
                       }).then(response => {
                         if(response.data !=0 ){
-                          alert("注册成功")
+                        this.$toast("注册成功")
                           this.reload()
                         }else {
-                          alert("注册失败")
+                        this.$toast("注册失败")
                         }
                       })
                     }else {
-                      alert("验证超时")
+                      this.$toast("验证超时")
                     }
 
                   }
