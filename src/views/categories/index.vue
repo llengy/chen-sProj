@@ -21,8 +21,8 @@
       <div @click.stop="toggleCart" class="footer-left"></div>
       <div class="footer-center">
         <p>￥{{totalPrice | priceFilter}}</p>
-        <span>另需服务费¥10.0</span>
-        <!-- <span class="tip">支持自送</span> -->
+        <span v-if="totalPrice < 50">另需服务费¥10.0</span>
+         <span v-else>免服务费</span>
       </div>
       <div class="footer-right" @click="handleSettlement">
         去结算
@@ -102,7 +102,7 @@ export default {
      * 获取到所有分类
      */
     getCategoryList:function () {
-      this.$http.post('/api/admin/cat/getCategoryList',{
+      this.$http.post(this.$Api.categoryList,{
       }).then(response =>{
         if(this.$global.successCode == response.data.code){
           this.categoryList = response.data.data.rows;
@@ -121,7 +121,7 @@ export default {
     },
     getGoodsByCatNo:function () {
       for(let i = 0; i <  this.categoryList.length; i++){
-        this.$http.post('/api/admin/goods/getGoodsList',{catNo:this.categoryList[i].cat_no}
+        this.$http.post(this.$Api.goodsList,{catNo:this.categoryList[i].cat_no}
           ).then(response =>{
           this.$set(this.goodsObj,this.categoryList[i].cat_no,response.data.data.rows);
           },response=>{

@@ -12,17 +12,20 @@
             <p class="top-left">{{item.status}}</p>
             <div class="top-right">
               <p>订单编号 : {{item.order_id}}</p>
-              <p>取件时间 : 2019.04.01  08:00 - 09:00</p>
+              <p>取件时间 : {{item.takeDate}}</p>
             </div>
           </div>
           <div class="flex bottom">
-            <p class="bottom-left">支付费用: ￥{{item.price}}</p>
+            <p class="bottom-left">支付费用: ￥{{item.price | priceFilter}}</p>
             <div class="bottom-right flex" v-if="item.status === '待付款'">
               <p>取消订单</p>
               <p>立即支付</p>
             </div>
             <div class="bottom-right flex" v-if="item.status === '待确认收衣'">
               <p>确认收衣</p>
+            </div>
+            <div class="bottom-right flex" v-if="item.status === '待评价'">
+              <p class="eva-button" @click="showReview(item)">评价</p>
             </div>
           </div>
           <i class="arrow"></i>
@@ -47,7 +50,7 @@
         </div>
       </div>
       <div class="dialog-footer">
-        <p class="eva-button">保存评价</p>
+        <p class="eva-button" @click="review">保存评价</p>
       </div>
     </div>
   </main>
@@ -68,7 +71,7 @@
       }
     },
     created(){
-      this.$http.post('/api/admin/order/getOrderTotal',{
+      this.$http.post(this.$Api.orderTotal,{
         custId:this.$store.state.session.currentUser.cust_id
       }).then(response =>{
           if(this.$global.successCode == response.data.code){
@@ -100,6 +103,12 @@
       },
       evaluation() {
         this.isVisibale = !this.isVisibale
+      },
+      showReview(data){
+        this.isVisibale = !this.isVisibale;
+      },
+      review(){
+        console.log(this.tabIndex);
       }
     }
   }

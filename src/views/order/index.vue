@@ -32,7 +32,7 @@
                   <span>{{item.goods_name}}</span>
                   <span>x{{item.total}}</span>
                 </p>
-                <span>￥{{item.total*item.price}}</span>
+                <span>￥{{item.total*item.price | priceFilter}}</span>
               </li>
             </ul>
           </div>
@@ -40,7 +40,7 @@
             <span>服务费：</span>
             <span v-if="totalPrice > 50">￥10</span>
             <span v-if="totalPrice > 50">￥{{serviceTip}}</span>
-            <p v-else>￥{{serviceTip}}</p>
+            <p v-else>￥{{serviceTip | priceFilter}}</p>
           </div>
         </li>
         <li class="list-item comment">
@@ -63,7 +63,7 @@
       </mt-datetime-picker>
     </section>
     <div class="cus-btn">
-      <p class="pay-total">合计：￥{{totalPrice+serviceTip}}</p>
+      <p class="pay-total">合计：￥{{totalPrice+serviceTip | priceFilter}}</p>
       <p @click="pay" class="pay">支付宝支付</p>
     </div>
   </main>
@@ -122,7 +122,7 @@ export default {
         this.$toast('请选择地址')
         return
       }
-      this.$http.post('/api/jsp/alipay.trade.page.pay.jsp',{
+      this.$http.post(this.$Api.payPage,{
         //商户订单号
         WIDout_trade_no: "123456789",
         //订单名称
@@ -314,6 +314,7 @@ export default {
                 letter-spacing: 0;
                 &:last-child{
                   margin-bottom: 0;
+                  /*margin-right: 10px;*/
                 }
                 p{
                   span{

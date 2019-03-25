@@ -93,7 +93,7 @@
         this.tabIndex = index
       },
       handleLogin() {
-        this.$http.post('/api/login',{
+        this.$http.post(this.$Api.login,{
           mobile: this.loginForm.tel,
           password: this.loginForm.passwd
         }).then(response => {
@@ -129,7 +129,7 @@
               this.randomNumStr += this.randomNum;
             }
             this.smscodeT = this.randomNumStr
-            this.$http.post('/api/sendSMS',{
+            this.$http.post(this.$Api.sendSms,{
               codeT: this.smscodeT,
               mobile: this.registerForm.tel
             }).then(response => {
@@ -178,7 +178,7 @@
                     this.$toast("密码要输入哦");
                   } else {
                     if(this.time > 0){
-                      this.$http.post("/api/register",{
+                      this.$http.post(this.$Api.register,{
                         code: this.registerForm.smscode,
                         usefulTime: this.time,
                         codeT: this.smscodeT,

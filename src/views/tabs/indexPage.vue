@@ -96,7 +96,7 @@ export default {
      * 获取到所有分类
      */
     getCategories:function () {
-      this.$http.post('/api/admin/cat/getCategoryList',{
+      this.$http.post(this.$Api.categoryList,{
       }).then(response =>{
         this.categoies = response.data.data.rows;
         // alert( response.data.data.rows)

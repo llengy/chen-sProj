@@ -10,7 +10,7 @@
           </div>
           <div class="box-content">
             <p>订单编号: {{order.order_id}}</p>
-            <p>取件时间: 2019.04.01  08:00 - 09:00</p>
+            <p>取件时间: {{orderDetail[0].takeDate}}</p>
             <p>备注信息: 暂无备注</p>
             <p>干洗门店: {{order.shop_name}}</p>
           </div>
@@ -145,7 +145,7 @@
         this.isVisibale = !this.isVisibale
       },
       getOrderDetail(){
-        this.$http.post('/api/admin/order/getOrderDetail',{
+        this.$http.post(this.$Api.orderDetail,{
             orderId:this.order.order_id
           }).then(response =>{
           if(this.$global.successCode == response.data.code){

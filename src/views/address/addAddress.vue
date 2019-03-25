@@ -50,7 +50,7 @@
           addressId:this.$router.currentRoute.params.address.address_id
         }
         if(this.$router.currentRoute.params.address){
-          this.$http.post('/api/address/update',param
+          this.$http.post(this.$Api.updateAddress,param
           ).then(response =>{
 
             if(this.$global.successCode == response.data.code){
@@ -63,7 +63,7 @@
             this.$toast('找不到服务器');
           })
         }else{
-          this.$http.post('/api/address/add',param
+          this.$http.post(this.$Api.addAddress,param
           ).then(response =>{
             if(this.$global.successCode == response.data.code){
               this.$toast('添加成功');

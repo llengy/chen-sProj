@@ -8,6 +8,7 @@ import qs from 'qs'
 import VueAxios from 'vue-axios'
 import store from '@/store/index'
 import ajax from '@/utils/http'
+import api from '@/utils/api'
 import global from './components/global'//引用文件
 
 import '@/utils/filters'
@@ -67,7 +68,7 @@ var axios_instance = axios.create({
 Vue.use(VueAxios, axios_instance)
 Vue.prototype.$toast = Toast;
 Vue.prototype.$global = global//挂载到Vue实例上面
-
+Vue.prototype.$Api = api
 
 /* 路有拦截 */
 router.beforeEach((to, from, next) => {
