@@ -11,7 +11,8 @@
           <div class="box-content">
             <p>订单编号: {{order.order_id}}</p>
             <p>取件时间: {{orderDetail[0].takeDate}}</p>
-            <p>备注信息: 暂无备注</p>
+            <p v-if="order.remark">备注信息: {{order.remark}}</p>
+            <p v-else>备注信息: 暂无备注</p>
             <p>干洗门店: {{order.shop_name}}</p>
           </div>
         </div>
@@ -88,6 +89,10 @@
                   <span class="timeline-btn" :class="orderDetail[0].reviewDate ? 'check' : 'uncheck'">待评价</span>
                   <p class="timeline-time">状态改变时间: {{orderDetail[0].reviewDate}}</p>
                 </li>
+                <li class="timeline-item">
+                  <i class="timeline-step" :class="orderDetail[0].reviewDate ? 'check' : 'uncheck'"></i>
+                  <span class="timeline-btn" :class="orderDetail[0].reviewDate ? 'check' : 'uncheck'">已完成</span>
+                </li>
               </template>
             </ul>
           </div>
@@ -146,11 +151,11 @@
       },
       getOrderDetail(){
         this.$http.post(this.$Api.orderDetail,{
-            orderId:this.order.order_id
-          }).then(response =>{
+          orderId:this.order.order_id
+        }).then(response =>{
           if(this.$global.successCode == response.data.code){
           this.orderDetail = response.data.data.rows;
-          // console.log(this.orderDetail);
+          console.log(this.orderDetail);
 
         }else{
           this.$toast(response.data.desc);

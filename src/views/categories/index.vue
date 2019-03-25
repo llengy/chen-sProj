@@ -22,7 +22,7 @@
       <div class="footer-center">
         <p>￥{{totalPrice | priceFilter}}</p>
         <span v-if="totalPrice < 50">另需服务费¥10.0</span>
-         <span v-else>免服务费</span>
+        <span v-else>免服务费</span>
       </div>
       <div class="footer-right" @click="handleSettlement">
         去结算
@@ -95,7 +95,10 @@ export default {
     this.getCategoryList();
   },
   mounted:function () {
-
+    this.myCart = this.$store.state.shopCart.mycart;
+    this.myCart.forEach((data, index) => {
+      this.totalPrice += data.price * data.total;
+    });
   },
   methods: {
     /**
@@ -134,9 +137,11 @@ export default {
       this.myCart = []
       this.totalPrice = 0
       this.popupVisible = false
+      this.$store.commit('CLEAR_CART');
     },
     // 去结算
     handleSettlement() {
+      console.log(this.totalPrice)
       if(this.myCart.length === 0) {
         this.$toast('请添加商品!')
         return
@@ -187,7 +192,7 @@ export default {
     handleSub(item){
       this.myCart.forEach((data, index) => {
         if(data.goods_no === item.goods_no) {
-          if(item.total >= 1) {
+          if(item.total > 1) {
             data.total -= 1
           } else {
             this.myCart.splice(index, 1)

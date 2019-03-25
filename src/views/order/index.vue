@@ -38,8 +38,8 @@
           </div>
           <div class="order-total">
             <span>服务费：</span>
-            <span v-if="totalPrice > 50">￥10</span>
-            <span v-if="totalPrice > 50">￥{{serviceTip}}</span>
+            <span v-if="totalPrice >= 50">￥10</span>
+            <span v-if="totalPrice >= 50">￥{{serviceTip}}</span>
             <p v-else>￥{{serviceTip | priceFilter}}</p>
           </div>
         </li>
@@ -92,6 +92,8 @@ export default {
       pickTime: '',
       address: '',
       shopName: '',
+      shopNO:'' , //自动分配的门店编号,
+      orderId:''
 
     }
   },
@@ -107,7 +109,7 @@ export default {
       return sum
     },
     serviceTip() {
-      return this.totalPrice > 50 ? 0 : 10
+      return this.totalPrice >= 50 ? 0 : 10
     }
   },
   mounted() {
@@ -142,6 +144,7 @@ export default {
       })
     },
     pay(){
+
       if(this.pickTime === '') {
         this.$toast('请选择取衣时间')
         return
@@ -150,6 +153,10 @@ export default {
         this.$toast('请选择地址')
         return
       }
+      //清空购物车
+      this.$store.commit('CLEAR_CART');
+      //创建订单
+      this.createOrder();
       this.$http.post(this.$Api.payPage,{
         //商户订单号
         WIDout_trade_no: "123456789",
@@ -173,6 +180,37 @@ export default {
       }, response => {
         this.$toast('找不到服务器!');
       });
+    },
+    createOrder(){
+      //创建订单
+      let arr = [];
+      this.$store.state.shopCart.mycart.forEach(item => {
+        arr[arr.length] =JSON.stringify(item);
+    });
+      let goodsStr = arr.join(',')
+      let param = {
+        shopNO :this.shopNO,
+        appointDate : this.pickTime,//预约取衣时间
+        price:this.totalPrice,
+        remark:this.comment,//备注
+        addressId : this.address.address_id,// 地址id
+        custId : this.$store.state.session.currentUser.cust_id,
+        goodsStr:goodsStr//订单详情
+      }
+
+      this.$http.post(this.$Api.createOrder,param)
+        .then(response =>{
+        if(this.$global.successCode == response.data.code){
+        this.orderId = response.data.data.orderId;
+        console.log(this.orderId)
+      }else{
+        this.$toast(response.data.desc);
+        return;
+      }
+    },response=>{
+        this.$toast('找不到服务器!');
+      })
+
     },
     openPicker() {
       let end = this.formateDate(new Date().getTime() + 7 * 24 * 60 * 60 * 1000)

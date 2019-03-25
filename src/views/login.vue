@@ -99,7 +99,6 @@
         }).then(response => {
           if (this.$global.successCode == response.data.code) {
             //登录成功将信息保存到sessionStorage
-            sessionStorage.setItem("user",response.data.data);
             this.$store.commit('userStatus', response.data.data);
             // console.log(this.$store.state.session.currentUser.cust_id);
             //跳转首页

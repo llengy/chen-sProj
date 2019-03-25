@@ -61,13 +61,15 @@
     components: {
       MyHeader
     },
+    inject:['reload'],
     data() {
       return {
         isEmpty: false,
         isVisibale: false,
         evaluationTxt: '',
         tabIndex: 0,
-        orderTotal:[]
+        orderTotal:[],
+        orderId:''
       }
     },
     created(){
@@ -105,10 +107,37 @@
         this.isVisibale = !this.isVisibale
       },
       showReview(data){
+        console.log(data);
+        this.orderId = data.order_id;
         this.isVisibale = !this.isVisibale;
       },
       review(){
-        // console.log(this.tabIndex);
+        let param ={
+          custId : this.$store.state.session.currentUser.cust_id,
+          orderId : this.orderId,
+          content : this.evaluationTxt,
+          rate:this.tabIndex
+        }
+        this.$http.post(
+          this.$Api.review,param
+        ).then(response =>{
+          if(this.$global.successCode == response.data.code){
+            this.$toast("评价成功");
+            this.reload();
+            this.$router.push({
+              name: 'index',
+              params:{
+                sel:'订单'
+              }
+          })
+
+          }else{
+          this.$toast(response.data.desc);
+          return null;
+        }
+      },response=>{
+          this.$toast('找不到服务器');
+        })
       }
     }
   }

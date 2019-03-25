@@ -46,6 +46,11 @@ export default {
       selected: '首页'
     }
   },
+  mounted() {
+    if(vm.$router.currentRoute.params.sel) {
+      vm.selected = vm.$router.currentRoute.params.sel
+    }
+  },
   beforeRouteEnter  (to, from, next) {
     next(vm => {
       if(vm.$router.currentRoute.params.sel) {
