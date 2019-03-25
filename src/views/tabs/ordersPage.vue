@@ -108,7 +108,7 @@
         this.isVisibale = !this.isVisibale;
       },
       review(){
-        console.log(this.tabIndex);
+        // console.log(this.tabIndex);
       }
     }
   }

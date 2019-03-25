@@ -10,7 +10,8 @@ const url ={
   orderTotal:BASEURL+'admin/order/getOrderTotal',
   custAddress:BASEURL+'address/getCustAddress',
   updateAddress:BASEURL+'address/update',
-  addAddress:BASEURL+'address/add'
+  addAddress:BASEURL+'address/add',
+  getShopName:BASEURL+'admin/shop/getCustLaundryShopList'
 
 
 }

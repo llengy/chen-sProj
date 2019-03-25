@@ -49,10 +49,10 @@
           recevier:this.username,
           addressId:this.$router.currentRoute.params.address.address_id
         }
+        // console.log(address);
         if(this.$router.currentRoute.params.address){
           this.$http.post(this.$Api.updateAddress,param
           ).then(response =>{
-
             if(this.$global.successCode == response.data.code){
               this.$toast('修改成功');
               this.$router.back(-1);

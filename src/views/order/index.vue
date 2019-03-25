@@ -16,7 +16,7 @@
         </li>
         <li class="list-item store">
           <p>干洗门店 (自动分配)</p>
-          <p>绿园一店</p>
+          <p id="shopName" >{{shopName}}</p>
         </li>
         <li class="list-item picker" @click="openPicker">
           <p>请选择取衣时间</p>
@@ -70,6 +70,7 @@
 </template>
 <script>
 import MyHeader from '@/components/header'
+import AMap from 'AMap';
 export default {
   components: {
     MyHeader
@@ -89,7 +90,9 @@ export default {
       endDate: new Date('2019-03-26'),
       comment: '',
       pickTime: '',
-      address: ''
+      address: '',
+      shopName: '',
+
     }
   },
   computed: {
@@ -108,11 +111,36 @@ export default {
     }
   },
   mounted() {
+
     if(this.$router.currentRoute.params.selectedAddress) {
       this.address = this.$router.currentRoute.params.selectedAddress
     }
+    this.laundryShop()
   },
   methods: {
+    laundryShop(){
+      //获取解析地址
+      this.geocoder = new AMap.Geocoder();
+       this.geocoder.getLocation(this.address.address, function(status, result) {
+        if (status === 'complete'&&result.geocodes) {}});
+
+       //获取返回数据
+      AMap.event.addListener(this.geocoder,"complete",(data) =>{
+        let city  =  data.geocodes[0].addressComponent.district;
+        this.$http.post(this.$Api.getShopName,{
+          shop_address: city
+        }).then(response => {
+          if (this.$global.successCode == response.data.code) {
+                this.shopName = response.data.data.rows[0].shop_name;
+                document.getElementById('shopName').value = this.shopName
+          } else {
+            this.$toast(response.data.desc);
+          }
+        }, response => {
+          this.$toast('找不到服务器!');
+        });
+      })
+    },
     pay(){
       if(this.pickTime === '') {
         this.$toast('请选择取衣时间')
