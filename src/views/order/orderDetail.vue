@@ -143,7 +143,6 @@
     mounted() {
       this.order = this.$router.currentRoute.params.selectedOrder;
       this.getOrderDetail();
-
     },
     methods: {
       showMore() {

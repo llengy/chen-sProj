@@ -81,7 +81,7 @@
             if(0 === this.orderTotal.length){
               this.isEmpty = !this.isEmpty;
             }
-            console.log(this.orderTotal);
+            // console.log(this.orderTotal);
           }else{
             this.$toast(response.data.desc)
           }
@@ -94,7 +94,6 @@
         this.tabIndex = index
       },
       showDetail(data) {
-        // console.log(data)
         this.$router.push({
           name: 'orderDetail',
           params:{
@@ -107,7 +106,7 @@
         this.isVisibale = !this.isVisibale
       },
       showReview(data){
-        console.log(data);
+        // console.log(data);
         this.orderId = data.order_id;
         this.isVisibale = !this.isVisibale;
       },
@@ -121,23 +120,18 @@
         this.$http.post(
           this.$Api.review,param
         ).then(response =>{
-          if(this.$global.successCode == response.data.code){
+          if(this.$global.successCode === response.data.code){
             this.$toast("评价成功");
-            this.reload();
-            this.$router.push({
-              name: 'index',
-              params:{
-                sel:'订单'
-              }
-          })
-
+            this.isVisibale = !this.isVisibale;
+            // this.reload();
+            // this.$emit();
           }else{
-          this.$toast(response.data.desc);
-          return null;
-        }
+            this.$toast(response.data.desc);
+          }
       },response=>{
           this.$toast('找不到服务器');
         })
+
       }
     }
   }

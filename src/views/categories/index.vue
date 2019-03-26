@@ -40,7 +40,7 @@
         </div>
         <div class="popup-body">
           <ul class="flex cart">
-            <li class="flex cart-item" v-for="(item, index) in myCart" :key="index">
+            <li class="flex cart-item" v-if="item.total" v-for="(item, index) in myCart" :key="index">
               <p>{{item.goods_name}}</p>
               <p>￥{{item.price | priceFilter}}</p>
               <p class="flex">
@@ -96,9 +96,11 @@ export default {
   },
   mounted:function () {
     this.myCart = this.$store.state.shopCart.mycart;
+
     this.myCart.forEach((data, index) => {
       this.totalPrice += data.price * data.total;
     });
+
   },
   methods: {
     /**
@@ -127,13 +129,15 @@ export default {
         this.$http.post(this.$Api.goodsList,{catNo:this.categoryList[i].cat_no}
           ).then(response =>{
           this.$set(this.goodsObj,this.categoryList[i].cat_no,response.data.data.rows);
+          this.setGoodsTotal();
           },response=>{
-
         })
       }
     },
     //清空
     clearCart() {
+      //清空图片右上角的数字
+      this.clearGoodsTotal();
       this.myCart = []
       this.totalPrice = 0
       this.popupVisible = false
@@ -192,9 +196,9 @@ export default {
     handleSub(item){
       this.myCart.forEach((data, index) => {
         if(data.goods_no === item.goods_no) {
-          if(item.total > 1) {
+          if(item.total >= 1) {
             data.total -= 1
-          } else {
+          } else{
             this.myCart.splice(index, 1)
           }
         }
@@ -217,6 +221,33 @@ export default {
         total = total + (data.total * data.price)
       });
       this.totalPrice = total
+    },
+    //设置商品图选中的数量
+    setGoodsTotal(){
+      if(this.myCart){
+        for(let i = 0;i<this.categoryList.length;i++){
+          for(let j = 0;j<this.goodsObj[this.categoryList[i].cat_no].length;j++){
+            for(let k=0;k<this.myCart.length;k++){
+              if(this.myCart[k].goods_no == this.goodsObj[this.categoryList[i].cat_no][j].goods_no){
+                this.$set(this.goodsObj[this.categoryList[i].cat_no][j], "total",this.myCart[k].total)
+              }
+            }
+          }
+        }
+      }
+
+    },
+    //清空商品图选中的数量
+    clearGoodsTotal(){
+      for(let i = 0;i<this.categoryList.length;i++){
+        for(let j = 0;j<this.goodsObj[this.categoryList[i].cat_no].length;j++){
+          for(let k=0;k<this.myCart.length;k++){
+            if(this.myCart[k].goods_no == this.goodsObj[this.categoryList[i].cat_no][j].goods_no){
+              this.$set(this.goodsObj[this.categoryList[i].cat_no][j], "total",  0)
+            }
+          }
+        }
+      }
     }
   }
 }
