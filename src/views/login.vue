@@ -32,10 +32,6 @@
         <input type="text" class="form-control" placeholder="请输入名称" v-model="registerForm.userName">
       </div>
       <div class="form-group">
-        <input class="sex-btn" type="radio" checked ="checked" name="sex" value="男" v-model="registerForm.sex"><label class="sex">男</label>
-        <input class="sex-btn" type="radio"  name="sex" value="女" v-model="registerForm.sex"><label class="sex" >女</label>
-      </div>
-      <div class="form-group">
         <input type="tel" class="form-control" placeholder="请输入手机号" v-model="registerForm.tel">
       </div>
       <div class="form-group">
@@ -175,10 +171,6 @@
           this.$toast("请输入姓名");
           return
         }
-        if(this.registerForm.sex === ''){
-          this.$toast("请选性别");
-          return
-        }
         if (this.registerForm.tel === '') {
           this.$toast("请输入手机号码")
           return
@@ -202,7 +194,6 @@
             usefulTime: this.time,
             codeT: this.smscodeT,
             cname:this.registerForm.userName,
-            sex:this.registerForm.sex,
             mobile:this.registerForm.tel,
             password:this.registerForm.passwd
           }).then(response => {
@@ -387,31 +378,10 @@
       button{
         border: 1px;
       }
-      label.sex{
-        opacity: 0.9;
-        font-size: 35px;
-        color: #FFFFFF;
-        letter-spacing: 50px;
-        margin-left: 15px;
-        text-align: center;
-        line-height: 30px;
-      }
-      .sex-btn{
-        display: flex;
-        margin-left: 45px;
-        opacity: 0.9;
-        width: 30px;
-        height: 30px;
-        font-size: 48px;
-        color: #FFFFFF;
-        text-align: center;
-        line-height: 64px;
-      }
       .cus-btn{
         margin-top: 45px;
 
       }
-
       .sms-btn{
         position: absolute;
         right: 30px;

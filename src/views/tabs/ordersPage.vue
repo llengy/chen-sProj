@@ -19,7 +19,7 @@
             <p class="bottom-left">支付费用: ￥{{item.price | priceFilter}}</p>
             <div class="bottom-right flex" v-if="item.status === '待付款'">
               <p>取消订单</p>
-              <p>立即支付</p>
+              <p @click="pay">立即支付</p>
             </div>
             <div class="bottom-right flex" v-if="item.status === '待确认收衣'">
               <p>确认收衣</p>
@@ -73,6 +73,7 @@
       }
     },
     created(){
+      console.log(this.$store.state.session.currentUser.cust_id);
       this.$http.post(this.$Api.orderTotal,{
         custId:this.$store.state.session.currentUser.cust_id
       }).then(response =>{
@@ -90,6 +91,7 @@
         })
     },
     methods: {
+
       switchEva(index) {
         this.tabIndex = index
       },
@@ -138,7 +140,12 @@
       },response=>{
           this.$toast('找不到服务器');
         })
-      }
+      },
+
+      pay(data){
+
+
+      },
     }
   }
 </script>

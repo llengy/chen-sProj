@@ -13,6 +13,6 @@ const url ={
   addAddress:BASEURL+'address/add', //添加地址
   review:BASEURL+'review/add',   //评价
   createOrder:BASEURL+'admin/order/add',//创建订单
-  getShopInfo:BASEURL+'admin/shop/getCustLaundryShopList'
+  getShopInfo:BASEURL+'admin/shop/getCustLaundryShopList' //顾客获取门店地址
 }
 export default url
