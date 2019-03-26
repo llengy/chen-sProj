@@ -18,8 +18,8 @@
           <div class="flex bottom">
             <p class="bottom-left">支付费用: ￥{{item.price | priceFilter}}</p>
             <div class="bottom-right flex" v-if="item.status === '待付款'">
-              <p>取消订单</p>
-              <p>立即支付</p>
+              <p @click="cancelOrder(item)">取消订单</p>
+              <p @click="pay(item)">立即支付</p>
             </div>
             <div class="bottom-right flex" v-if="item.status === '待确认收衣'">
               <p>确认收衣</p>
@@ -73,21 +73,7 @@
       }
     },
     created(){
-      this.$http.post(this.$Api.orderTotal,{
-        custId:this.$store.state.session.currentUser.cust_id
-      }).then(response =>{
-          if(this.$global.successCode == response.data.code){
-            this.orderTotal = response.data.data.rows;
-            if(0 === this.orderTotal.length){
-              this.isEmpty = !this.isEmpty;
-            }
-            // console.log(this.orderTotal);
-          }else{
-            this.$toast(response.data.desc)
-          }
-        },response => {
-          this.$toast('找不到服务器!')
-        })
+      this.getOrderTotal();
     },
     methods: {
       switchEva(index) {
@@ -110,6 +96,27 @@
         this.orderId = data.order_id;
         this.isVisibale = !this.isVisibale;
       },
+      //得到订单概览
+      getOrderTotal(){
+        this.$http.post(this.$Api.orderTotal,{
+          custId:this.$store.state.session.currentUser.cust_id
+        }).then(response =>{
+          if(this.$global.successCode == response.data.code){
+          this.orderTotal = response.data.data.rows;
+          if(0 === this.orderTotal.length){
+            this.isEmpty = !this.isEmpty;
+          }
+          // console.log(this.orderTotal);
+        }else{
+          this.$toast(response.data.desc)
+        }
+      },response => {
+          this.$toast('找不到服务器!')
+        })
+      },
+      /**
+       * 订单评价
+       */
       review(){
         let param ={
           custId : this.$store.state.session.currentUser.cust_id,
@@ -132,6 +139,22 @@
           this.$toast('找不到服务器');
         })
 
+      },
+      /**
+       * 取消订单
+       */
+      cancelOrder(item){
+        this.$http.post(this.$Api.cancelOrder,{
+          orderId:item.order_id
+        }).then(response =>{
+          if(this.$global.successCode == response.data.code){
+          this.$toast("取消订单成功")
+        }else{
+          this.$toast(response.data.desc)
+        }
+      },response => {
+          this.$toast('找不到服务器!')
+        })
       }
     }
   }

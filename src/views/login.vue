@@ -14,12 +14,12 @@
         <input type="password" class="form-control" placeholder="请输入密码" v-model="loginForm.passwd">
       </div>
       <div class="form-group checkbox">
-        <div class="custom-checkbox">
-          <input ref="chkbox" type="checkbox" class="custom-control-input" v-model="checked" id="checkbox">
-          <label class="custom-control-label" for="checkbox">
-            <span>记住我</span>
-          </label>
-        </div>
+        <!--<div class="custom-checkbox">-->
+          <!--<input ref="chkbox" type="checkbox" class="custom-control-input" v-model="checked" id="checkbox">-->
+          <!--<label class="custom-control-label" for="checkbox">-->
+            <!--<span>记住我</span>-->
+          <!--</label>-->
+        <!--</div>-->
         <router-link class="help" to="/resetpwd">
           忘记密码？
         </router-link>
@@ -31,10 +31,10 @@
       <div class="form-group">
         <input type="text" class="form-control" placeholder="请输入名称" v-model="registerForm.userName">
       </div>
-      <div class="form-group">
-        <input class="sex-btn" type="radio" checked ="checked" name="sex" value="男" v-model="registerForm.sex"><label class="sex">男</label>
-        <input class="sex-btn" type="radio"  name="sex" value="女" v-model="registerForm.sex"><label class="sex" >女</label>
-      </div>
+      <!--<div class="form-group">-->
+        <!--<input class="sex-btn" type="radio" checked ="checked" name="sex" value="男" v-model="registerForm.sex"><label class="sex">男</label>-->
+        <!--<input class="sex-btn" type="radio"  name="sex" value="女" v-model="registerForm.sex"><label class="sex" >女</label>-->
+      <!--</div>-->
       <div class="form-group">
         <input type="tel" class="form-control" placeholder="请输入手机号" v-model="registerForm.tel">
       </div>

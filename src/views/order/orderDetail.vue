@@ -39,8 +39,8 @@
           <div class="box-content">
             <ul class="flex timeline">
               <li class="timeline-item">
-                <i class="timeline-step"  :class="orderDetail[0].payDate ? 'check' : 'uncheck'"></i>
-                <span class="timeline-btn" :class="orderDetail[0].payDate ? 'check' : 'uncheck'">待付款</span>
+                <i class="timeline-step"  :class="orderDetail[0].createDate ? 'check' : 'uncheck'"></i>
+                <span class="timeline-btn" :class="orderDetail[0].createDate ? 'check' : 'uncheck'">待付款</span>
                 <p class="timeline-time">状态改变时间: {{orderDetail[0].payDate}}</p>
               </li>
               <li class="timeline-item">

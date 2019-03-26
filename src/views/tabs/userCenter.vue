@@ -25,55 +25,59 @@
             <div class="content order" v-show="isExpand.order && isLogin">
               <ul class="flex timeline">
                 <li class="timeline-item">
-                  <i class="timeline-step"></i>
-                  <span class="timeline-btn">待付款</span>
-                  <p class="timeline-time">状态改变时间: 2019.04.01 08:40</p>
+                  <i class="timeline-step" :class="orderLast.createDate ? 'check' : 'uncheck'"></i>
+                  <span class="timeline-btn" :class="orderLast.createDate ? 'check' : 'uncheck'">待付款</span>
+                  <p class="timeline-time">状态改变时间: {{orderLast.payDate}}</p>
                 </li>
                 <li class="timeline-item">
-                  <i class="timeline-step"></i>
-                  <span class="timeline-btn">待取衣</span>
-                  <p class="timeline-time">状态改变时间: 2019.04.01 09:40</p>
+                  <i class="timeline-step" :class="orderLast.payDate ? 'check' : 'uncheck'"></i>
+                  <span class="timeline-btn" :class="orderLast.payDate ? 'check' : 'uncheck'">待取衣</span>
+                  <p class="timeline-time">状态改变时间: {{orderLast.payDate}}</p>
                 </li>
                 <li class="timeline-item">
-                  <i class="timeline-step uncheck"></i>
-                  <span class="timeline-btn uncheck">已取衣</span>
-                  <p class="timeline-time">状态改变时间: </p>
+                  <i class="timeline-step" :class="orderLast.takeDate ? 'check' : 'uncheck'"></i>
+                  <span class="timeline-btn" :class="orderLast.takeDate ? 'check' : 'uncheck'">已取衣</span>
+                  <p class="timeline-time">状态改变时间:{{orderLast.takeDate}} </p>
                 </li>
                 <template v-if="isVisibale">
                   <li class="timeline-item">
-                    <i class="timeline-step uncheck"></i>
-                    <span class="timeline-btn uncheck">已送洗</span>
-                    <p class="timeline-time">状态改变时间: </p>
+                    <i class="timeline-step" :class="orderLast.sendDate ? 'check' : 'uncheck'"></i>
+                    <span class="timeline-btn" :class="orderLast.sendDate ? 'check' : 'uncheck'">已送洗</span>
+                    <p class="timeline-time">状态改变时间: {{orderLast.sendDate}}</p>
                   </li>
                   <li class="timeline-item">
-                    <i class="timeline-step uncheck"></i>
-                    <span class="timeline-btn uncheck">清洗中</span>
-                    <p class="timeline-time">状态改变时间: </p>
+                    <i class="timeline-step" :class="orderLast.washDate ? 'check' : 'uncheck'"></i>
+                    <span class="timeline-btn" :class="orderLast.washDate ? 'check' : 'uncheck'">清洗中</span>
+                    <p class="timeline-time">状态改变时间: {{orderLast.washDate}}</p>
                   </li>
                   <li class="timeline-item">
-                    <i class="timeline-step uncheck"></i>
-                    <span class="timeline-btn uncheck">已上挂</span>
-                    <p class="timeline-time">状态改变时间: </p>
+                    <i class="timeline-step" :class="orderLast.hangDate ? 'check' : 'uncheck'"></i>
+                    <span class="timeline-btn" :class="orderLast.hangDate ? 'check' : 'uncheck'">已上挂</span>
+                    <p class="timeline-time">状态改变时间: {{orderLast.hangDate}}</p>
                   </li>
                   <li class="timeline-item">
-                    <i class="timeline-step uncheck"></i>
-                    <span class="timeline-btn uncheck">已领取</span>
-                    <p class="timeline-time">状态改变时间:</p>
+                    <i class="timeline-step" :class="orderLast.receiveDate ? 'check' : 'uncheck'"></i>
+                    <span class="timeline-btn" :class="orderLast.receiveDate ? 'check' : 'uncheck'">已领取</span>
+                    <p class="timeline-time">状态改变时间:{{orderLast.receiveDate}}</p>
                   </li>
                   <li class="timeline-item">
-                    <i class="timeline-step uncheck"></i>
-                    <span class="timeline-btn uncheck">取回中</span>
-                    <p class="timeline-time">状态改变时间:</p>
+                    <i class="timeline-step" :class="orderLast.takeBackDate ? 'check' : 'uncheck'"></i>
+                    <span class="timeline-btn" :class="orderLast.takeBackDate ? 'check' : 'uncheck'">取回中</span>
+                    <p class="timeline-time">状态改变时间: {{orderLast.takeBackDate}}</p>
                   </li>
                   <li class="timeline-item">
-                    <i class="timeline-step uncheck"></i>
-                    <span class="timeline-btn uncheck">待确认</span>
-                    <p class="timeline-time">状态改变时间: </p>
+                    <i class="timeline-step uncheck" :class="orderLast.confirmDate ? 'check' : 'uncheck'"></i>
+                    <span class="timeline-btn uncheck" :class="orderLast.confirmDate ? 'check' : 'uncheck'">待确认</span>
+                    <p class="timeline-time">状态改变时间: {{orderLast.confirmDate}} </p>
                   </li>
                   <li class="timeline-item">
-                    <i class="timeline-step uncheck"></i>
-                    <span class="timeline-btn uncheck">待评价</span>
-                    <p class="timeline-time">状态改变时间: </p>
+                    <i class="timeline-step" :class="orderLast.reviewDate ? 'check' : 'uncheck'"></i>
+                    <span class="timeline-btn" :class="orderLast.reviewDate ? 'check' : 'uncheck'">待评价</span>
+                    <p class="timeline-time">状态改变时间: {{orderLast.reviewDate}}</p>
+                  </li>
+                  <li class="timeline-item">
+                    <i class="timeline-step" :class="orderLast.reviewDate ? 'check' : 'uncheck'"></i>
+                    <span class="timeline-btn" :class="orderLast.reviewDate ? 'check' : 'uncheck'">已完成</span>
                   </li>
                 </template>
               </ul>
@@ -116,8 +120,13 @@
           custome: false
         },
         username:'',
-        userId:''
+        userId:'',
+        orderLast:{}
       }
+    },
+    created(){
+      this.getOrderLast()
+      console.log(this.orderLast)
     },
     mounted() {
       if(JSON.stringify(this.$store.state.session.currentUser)!='{}'){
@@ -125,6 +134,8 @@
         this.userId = this.$store.state.session.currentUser.cust_id
         this.isLogin = !this.isLogin
       }
+
+
     },
     methods: {
       handleLogout() {
@@ -140,7 +151,24 @@
       },
       loginOrRegister() {
         this.$router.push('/login')
-      }
+      },
+      getOrderLast(){
+        if(this.isLogin){
+          this.$http.post(this.$Api.getOrderLastByCust,{
+            custId:this.$store.state.session.currentUser.cust_id
+          }).then(response =>{
+            if(this.$global.successCode == response.data.code){
+            console.log(response.data.data)
+            this.orderLast = response.data.data;
+          }else{
+            this.$toast(response.data.desc)
+          }
+        },response => {
+            this.$toast('找不到服务器!')
+          })
+        }
+
+      },
     }
   }
 </script>
