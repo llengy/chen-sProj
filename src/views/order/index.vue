@@ -64,7 +64,7 @@
     </section>
     <div class="cus-btn">
       <p class="pay-total">合计：￥{{totalPrice+serviceTip | priceFilter}}</p>
-      <p @click="pay" class="pay">支付宝支付</p>
+      <p @click="createOrder" class="pay">支付宝支付</p>
     </div>
   </main>
 </template>
@@ -127,7 +127,7 @@ export default {
        //获取返回数据
       AMap.event.addListener(this.geocoder,"complete",(data) =>{
         let city  =  data.geocodes[0].addressComponent.district;
-        this.$http.post(this.$Api.getShopName,{
+        this.$http.post(this.$Api.getShopInfo,{
           shop_address: city
         }).then(response => {
           if (this.$global.successCode == response.data.code) {
@@ -144,8 +144,8 @@ export default {
         });
       })
     },
-    pay(){
-
+    createOrder(){
+      //确认输入信息
       if(this.pickTime === '') {
         this.$toast('请选择取衣时间')
         return
@@ -154,15 +154,49 @@ export default {
         this.$toast('请选择地址')
         return
       }
+      this.sumPrice = this.totalPrice+this.serviceTip
       //创建订单
-      this.createOrder();
+      let arr = [];
+      this.$store.state.shopCart.mycart.forEach(item => {
+        arr[arr.length] =JSON.stringify(item);
+      });
+      let goodsStr = arr.join(',')
+      let param = {
+        shopNO: this.shopNO,
+        appointDate: this.pickTime,//预约取衣时间
+        price: this.sumPrice,
+        remark: this.comment,//备注
+        addressId: this.address.address_id,// 地址id
+        custId: this.$store.state.session.currentUser.cust_id,
+        goodsStr: goodsStr//订单详情
+
+      }
+
+      this.$http.post(this.$Api.createOrder,param)
+        .then(response =>{
+        if(this.$global.successCode == response.data.code){
+        this.orderId = response.data.data.orderId;
+        //订单支付
+        this.pay();
+
+      }else{
+        this.$toast(response.data.desc);
+        return;
+      }
+    },response=>{
+        this.$toast('找不到服务器!');
+      })
+    },
+    pay(){
+      //支付订单
+      console.log(this.sumPrice)
       this.$http.post(this.$Api.payPage,{
         //商户订单号
-        WIDout_trade_no: "123456789",
+        WIDout_trade_no: this.orderId,
         //订单名称
-        WIDsubject: "1",
+        WIDsubject: "干洗服装",
         //付款金额
-        WIDtotal_amount: "123",
+        WIDtotal_amount: this.sumPrice,
         //商品描述
         WIDbody: "",
       }).then(response => {
@@ -181,36 +215,6 @@ export default {
       }, response => {
         this.$toast('找不到服务器!');
       });
-    },
-    createOrder(){
-      //创建订单
-      let arr = [];
-      this.$store.state.shopCart.mycart.forEach(item => {
-        arr[arr.length] =JSON.stringify(item);
-      });
-      let goodsStr = arr.join(',')
-      let param = {
-        shopNO :this.shopNO,
-        appointDate : this.pickTime,//预约取衣时间
-        price:this.totalPrice,
-        remark:this.comment,//备注
-        addressId : this.address.address_id,// 地址id
-        custId : this.$store.state.session.currentUser.cust_id,
-        goodsStr:goodsStr//订单详情
-      }
-
-      this.$http.post(this.$Api.createOrder,param)
-        .then(response =>{
-        if(this.$global.successCode == response.data.code){
-        this.orderId = response.data.data.orderId;
-      }else{
-        this.$toast(response.data.desc);
-        return;
-      }
-    },response=>{
-        this.$toast('找不到服务器!');
-      })
-
     },
     openPicker() {
       let end = this.formateDate(new Date().getTime() + 7 * 24 * 60 * 60 * 1000)

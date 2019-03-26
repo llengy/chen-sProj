@@ -93,6 +93,19 @@
         this.tabIndex = index
       },
       handleLogin() {
+        //确认信息
+        if (this.loginForm.tel === '') {
+          this.$toast("请输入手机号码")
+          return
+        }
+        if (!/^((1[3,5,8][0-9])|(14[5,7])|(17[0,6,7,8])|(19[7]))\d{8}$/.test(this.loginForm.tel)) {
+          this.$toast("手机格式不正确");
+          return
+        }
+        if (this.loginForm.passwd === '') {
+          this.$toast("请输入密码")
+          return
+        }
         this.$http.post(this.$Api.login,{
           mobile: this.loginForm.tel,
           password: this.loginForm.passwd
@@ -115,36 +128,35 @@
       getSMSCode() {
         if (this.registerForm.tel === '') {
           this.$toast("请输入手机号码")
-        } else {
-          if (!/^((1[3,5,8][0-9])|(14[5,7])|(17[0,6,7,8])|(19[7]))\d{8}$/.test(this.registerForm.tel)) {
-            this.$toast("手机格式不正确");
-          } else {
-            //生成随机数
-            this.smscodeT = "";
-            this.length = 5;
-            this.randomNumStr = "";
-            for(this.i = 0; this.i < this.length;this.i++){
-              this.randomNum = Math.floor(Math.random() * 10);
-              this.randomNumStr += this.randomNum;
-            }
-            this.smscodeT = this.randomNumStr
-            this.$http.post(this.$Api.sendSms,{
-              codeT: this.smscodeT,
-              mobile: this.registerForm.tel
-            }).then(response => {
-              if(response.data == true){
-                this.time=60;
-                this.show = false;
-                this.timer();
-              }else {
-                this.$toast("发送验证失败")
-              }
-            })
-
-          }
+          return
         }
-      },
+        if (!/^((1[3,5,8][0-9])|(14[5,7])|(17[0,6,7,8])|(19[7]))\d{8}$/.test(this.registerForm.tel)) {
+          this.$toast("手机格式不正确");
+          return
+        }
+        //生成随机数
+        this.smscodeT = "";
+        this.length = 5;
+        this.randomNumStr = "";
+        for(this.i = 0; this.i < this.length;this.i++){
+          this.randomNum = Math.floor(Math.random() * 10);
+          this.randomNumStr += this.randomNum;
+        }
+        this.smscodeT = this.randomNumStr
+        this.$http.post(this.$Api.sendSms,{
+          codeT: this.smscodeT,
+          mobile: this.registerForm.tel
+        }).then(response => {
+          if(response.data == true){
+            this.time=60;
+            this.show = false;
+            this.timer();
+          }else {
+            this.$toast("发送验证失败")
+          }
+        })
 
+      },
       timer() {
         if (this.time > 0) {
           this.time--;
@@ -158,51 +170,53 @@
       },
 
       handleRegister() {
+        //确认信息
         if(this.registerForm.userName === ''){
           this.$toast("请输入姓名");
-        }else {
-          if(this.registerForm.sex === ''){
-            this.$toast("请选性别");
-          }else {
-            if (this.registerForm.tel === '') {
-              this.$toast("请输入手机号码")
-            } else {
-              if (!/^((1[3,5,8][0-9])|(14[5,7])|(17[0,6,7,8])|(19[7]))\d{8}$/.test(this.registerForm.tel)) {
-                this.$toast("手机格式不正确");
-              } else {
-                if (this.registerForm.smscode === ''){
-                  this.$toast("请输入验证码");
-                } else {
-                  if (this.registerForm.passwd === ''){
-                    this.$toast("请输入密码");
-                  } else {
-                    if(this.time > 0){
-                      this.$http.post(this.$Api.register,{
-                        code: this.registerForm.smscode,
-                        usefulTime: this.time,
-                        codeT: this.smscodeT,
-                        cname:this.registerForm.userName,
-                        sex:this.registerForm.sex,
-                        mobile:this.registerForm.tel,
-                        password:this.registerForm.passwd
-                      }).then(response => {
-                        if(response.data !=0 ){
-                        this.$toast("注册成功")
-                          this.reload()
-                        }else {
-                        this.$toast("注册失败")
-                        }
-                      })
-                    }else {
-                      this.$toast("验证超时")
-                    }
-
-                  }
-                }
-              }
-            }
-          }
+          return
         }
+        if(this.registerForm.sex === ''){
+          this.$toast("请选性别");
+          return
+        }
+        if (this.registerForm.tel === '') {
+          this.$toast("请输入手机号码")
+          return
+        }
+        if (!/^((1[3,5,8][0-9])|(14[5,7])|(17[0,6,7,8])|(19[7]))\d{8}$/.test(this.registerForm.tel)) {
+          this.$toast("手机格式不正确");
+          return
+        }
+        if (this.registerForm.smscode === ''){
+          this.$toast("请输入验证码");
+          return
+        }
+        if (this.registerForm.passwd === ''){
+          this.$toast("请输入密码");
+          return
+        }
+        //注册信息
+        if(this.time > 0){
+          this.$http.post(this.$Api.register,{
+            code: this.registerForm.smscode,
+            usefulTime: this.time,
+            codeT: this.smscodeT,
+            cname:this.registerForm.userName,
+            sex:this.registerForm.sex,
+            mobile:this.registerForm.tel,
+            password:this.registerForm.passwd
+          }).then(response => {
+            if(response.data !=0 ){
+              this.$toast("注册成功")
+              this.reload()
+            }else {
+              this.$toast("注册失败")
+            }
+          })
+        }else {
+          this.$toast("验证超时")
+        }
+
       },
 
       // query(){

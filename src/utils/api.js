@@ -1,7 +1,7 @@
 const BASEURL = '/api/'
 const url ={
   login:BASEURL+'login', //登录
-  sendSms:BASEURL+'', //发送验证码
+  sendSms:BASEURL+'sendSMS', //发送验证码
   register:BASEURL+'register', //注册
   categoryList:BASEURL+'admin/cat/getCategoryList', //获取所有分类
   goodsList:BASEURL+'admin/goods/getGoodsList', //获取分类下的所有商品
@@ -13,6 +13,6 @@ const url ={
   addAddress:BASEURL+'address/add', //添加地址
   review:BASEURL+'review/add',   //评价
   createOrder:BASEURL+'admin/order/add',//创建订单
-  getShopName:BASEURL+'admin/shop/getCustLaundryShopList'
+  getShopInfo:BASEURL+'admin/shop/getCustLaundryShopList'
 }
 export default url
