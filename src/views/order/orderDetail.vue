@@ -155,7 +155,7 @@
         }).then(response =>{
           if(this.$global.successCode == response.data.code){
           this.orderDetail = response.data.data.rows;
-          console.log(this.orderDetail);
+          // console.log(this.orderDetail);
 
         }else{
           this.$toast(response.data.desc);

@@ -16,7 +16,7 @@
         </li>
         <li class="list-item store">
           <p>干洗门店 (自动分配)</p>
-          <p id="shopName" >{{shopName}}</p>
+          <p v-model="shopName">{{shopName}}</p>
         </li>
         <li class="list-item picker" @click="openPicker">
           <p>请选择取衣时间</p>
@@ -88,7 +88,6 @@ export default {
       endHour: 23,
       startDate: new Date('2019'),
       endDate: new Date('2019-03-26'),
-      comment: '',
       pickTime: '',
       address: '',
       shopName: '',
@@ -99,6 +98,7 @@ export default {
   },
   computed: {
     goods() {
+      console.log(this.$store.state.shopCart.mycart)
       return this.$store.state.shopCart.mycart
     },
     totalPrice() {
@@ -113,7 +113,6 @@ export default {
     }
   },
   mounted() {
-
     if(this.$router.currentRoute.params.selectedAddress) {
       this.address = this.$router.currentRoute.params.selectedAddress
     }
@@ -125,7 +124,6 @@ export default {
       this.geocoder = new AMap.Geocoder();
        this.geocoder.getLocation(this.address.address, function(status, result) {
         if (status === 'complete'&&result.geocodes) {}});
-
        //获取返回数据
       AMap.event.addListener(this.geocoder,"complete",(data) =>{
         let city  =  data.geocodes[0].addressComponent.district;
@@ -133,8 +131,11 @@ export default {
           shop_address: city
         }).then(response => {
           if (this.$global.successCode == response.data.code) {
+              console.log(response.data.data.rows)
                 this.shopName = response.data.data.rows[0].shop_name;
-                document.getElementById('shopName').value = this.shopName
+                this.shopNO = response.data.data.rows[0].shop_no
+
+                // document.getElementById('shopName').value = this.shopName
           } else {
             this.$toast(response.data.desc);
           }
@@ -153,8 +154,6 @@ export default {
         this.$toast('请选择地址')
         return
       }
-      //清空购物车
-      this.$store.commit('CLEAR_CART');
       //创建订单
       this.createOrder();
       this.$http.post(this.$Api.payPage,{
@@ -176,6 +175,8 @@ export default {
         div.innerHTML = form//此处form就是后台返回接收到的数据
         document.body.appendChild(div)
         document.forms[0].submit()
+        //清空购物车
+        this.$store.commit('CLEAR_CART');
 
       }, response => {
         this.$toast('找不到服务器!');
@@ -186,7 +187,7 @@ export default {
       let arr = [];
       this.$store.state.shopCart.mycart.forEach(item => {
         arr[arr.length] =JSON.stringify(item);
-    });
+      });
       let goodsStr = arr.join(',')
       let param = {
         shopNO :this.shopNO,
@@ -202,7 +203,6 @@ export default {
         .then(response =>{
         if(this.$global.successCode == response.data.code){
         this.orderId = response.data.data.orderId;
-        console.log(this.orderId)
       }else{
         this.$toast(response.data.desc);
         return;

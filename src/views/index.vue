@@ -47,8 +47,8 @@ export default {
     }
   },
   mounted() {
-    if(vm.$router.currentRoute.params.sel) {
-      vm.selected = vm.$router.currentRoute.params.sel
+    if(this.$router.currentRoute.params.sel) {
+      this.selected = this.$router.currentRoute.params.sel
     }
   },
   beforeRouteEnter  (to, from, next) {

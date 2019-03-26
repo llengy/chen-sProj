@@ -159,22 +159,22 @@
 
       handleRegister() {
         if(this.registerForm.userName === ''){
-          this.$toast("姓名要输入哦");
+          this.$toast("请输入姓名");
         }else {
           if(this.registerForm.sex === ''){
-            this.$toast("要选性别哦");
+            this.$toast("请选性别");
           }else {
             if (this.registerForm.tel === '') {
-              this.$toast("要输入手机号码哦")
+              this.$toast("请输入手机号码")
             } else {
               if (!/^((1[3,5,8][0-9])|(14[5,7])|(17[0,6,7,8])|(19[7]))\d{8}$/.test(this.registerForm.tel)) {
                 this.$toast("手机格式不正确");
               } else {
                 if (this.registerForm.smscode === ''){
-                  this.$toast("验证码要输入哦");
+                  this.$toast("请输入验证码");
                 } else {
                   if (this.registerForm.passwd === ''){
-                    this.$toast("密码要输入哦");
+                    this.$toast("请输入密码");
                   } else {
                     if(this.time > 0){
                       this.$http.post(this.$Api.register,{
