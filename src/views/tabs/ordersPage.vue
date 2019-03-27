@@ -18,8 +18,8 @@
           <div class="flex bottom">
             <p class="bottom-left">支付费用: ￥{{item.price | priceFilter}}</p>
             <div class="bottom-right flex" v-if="item.status === '待付款'">
-              <p>取消订单</p>
-              <p>立即支付</p>
+              <p @click="cancelOrder(item)">取消订单</p>
+              <p @click="payOrder(item)">立即支付</p>
             </div>
             <div class="bottom-right flex" v-if="item.status === '待确认收衣'">
               <p>确认收衣</p>
@@ -61,7 +61,7 @@
     components: {
       MyHeader
     },
-    inject:['reload'],
+    inject: ['reload'],
     data() {
       return {
         isEmpty: false,
@@ -86,7 +86,6 @@
           params:{
             selectedOrder:data
           }
-
         })
       },
       evaluation() {
@@ -107,7 +106,7 @@
           if(0 === this.orderTotal.length){
             this.isEmpty = !this.isEmpty;
           }
-          // console.log(this.orderTotal);
+          // console.log(item.order_id);
         }else{
           this.$toast(response.data.desc)
         }
@@ -142,6 +141,34 @@
 
       },
       /**
+       * 订单付款
+       */
+      payOrder(item){
+        console.log(item.order_id)
+        this.$http.post(this.$Api.payPage,{
+          //商户订单号
+          WIDout_trade_no: item.order_id,
+          //订单名称
+          WIDsubject: "干洗服装",
+          //付款金额
+          WIDtotal_amount: item.price,
+          //商品描述
+          WIDbody: "",
+        }).then(response =>{
+            this.html = response.data
+            var form= response.data;
+            const div = document.createElement('div')
+            div.innerHTML = form//此处form就是后台返回接收到的数据
+            document.body.appendChild(div)
+            document.forms[0].submit()
+            //清空购物车
+            this.$store.commit('CLEAR_CART');
+
+        },response => {
+          this.$toast('找不到服务器!')
+        })
+      },
+      /**
        * 取消订单
        */
       cancelOrder(item){
@@ -150,7 +177,8 @@
         }).then(response =>{
           if(this.$global.successCode == response.data.code){
           this.$toast("取消订单成功")
-        }else{
+          this.refresh()
+          }else{
           this.$toast(response.data.desc)
         }
       },response => {
