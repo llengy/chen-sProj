@@ -99,8 +99,6 @@ export default {
       this.$http.post(this.$Api.categoryList,{
       }).then(response =>{
         this.categoies = response.data.data.rows;
-        // alert( response.data.data.rows)
-
     },response => {
         this.$toast('找不到服务器!');
       })

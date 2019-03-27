@@ -72,10 +72,20 @@ Vue.prototype.$Api = api
 
 /* 路有拦截 */
 router.beforeEach((to, from, next) => {
-  // Indicator.open({
-  //   spinnerType: 'fading-circle'
-  // })
-  next()
+    if (to.meta.requireAuth) {  // 判断该路由是否需要登录权限
+      if (store.state.isLogin) {  // 通过vuex state获取当前的用户是否登录
+        next();
+      }
+      else {
+        next({
+          path: '/login',
+          query: {redirect: to.fullPath}  // 将跳转的路由path作为参数，登录成功后跳转到该路由
+        })
+      }
+    }
+    else {
+      next();
+    }
 })
 
 router.afterEach((to, from) => {

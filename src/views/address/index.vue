@@ -78,7 +78,7 @@
         this.$http.post(this.$Api.custAddress,{custId:this.$store.state.session.currentUser.cust_id}
         ).then(response =>{
           if(this.$global.successCode == response.data.code){
-          console.log(response.data.data.rows[0]);
+          // console.log(response.data.data.rows[0]);
           this.address =  response.data.data.rows;
         }else{
           this.$toast(response.data.desc);
