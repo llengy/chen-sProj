@@ -125,17 +125,15 @@
       }
     },
     created(){
-      this.getOrderLast()
-      console.log(this.orderLast)
+
     },
     mounted() {
       if(JSON.stringify(this.$store.state.session.currentUser)!='{}'){
         this.username = this.$store.state.session.currentUser.cname
         this.userId = this.$store.state.session.currentUser.cust_id
         this.isLogin = !this.isLogin
+        this.getOrderLast()
       }
-
-
     },
     methods: {
       handleLogout() {
@@ -153,21 +151,18 @@
         this.$router.push('/login')
       },
       getOrderLast(){
-        if(this.isLogin){
-          this.$http.post(this.$Api.getOrderLastByCust,{
-            custId:this.$store.state.session.currentUser.cust_id
-          }).then(response =>{
-            if(this.$global.successCode == response.data.code){
-            console.log(response.data.data)
-            this.orderLast = response.data.data;
-          }else{
-            this.$toast(response.data.desc)
-          }
-        },response => {
-            this.$toast('找不到服务器!')
-          })
+        this.$http.post(this.$Api.getOrderLastByCust,{
+          custId:this.$store.state.session.currentUser.cust_id
+        }).then(response =>{
+          if(this.$global.successCode == response.data.code){
+          console.log(response.data.data)
+          this.orderLast = response.data.data;
+        }else{
+          this.$toast(response.data.desc)
         }
-
+      },response => {
+          this.$toast('找不到服务器!')
+        })
       },
     }
   }

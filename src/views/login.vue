@@ -363,8 +363,11 @@
         }
       }
       .cus-btn{
-        background-color: #1F4BA5;
-        border: 1px solid #1F4BA5;
+        width: 500px;
+        margin: 0 auto;
+        margin-top: 40px;
+        background-color: #3FB798;
+        border: 1px solid #3FB798;
         border-radius: 50px;
         color: #fff;
         padding: 0;
