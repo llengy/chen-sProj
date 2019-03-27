@@ -73,7 +73,7 @@ Vue.prototype.$Api = api
 /* 路有拦截 */
 router.beforeEach((to, from, next) => {
     if (to.meta.requireAuth) {  // 判断该路由是否需要登录权限
-      if (store.state.isLogin) {  // 通过vuex state获取当前的用户是否登录
+      if (JSON.stringify(store.state.session.currentUser)!='{}') {  // 通过vuex state获取当前的用户是否登录
         next();
       }
       else {
