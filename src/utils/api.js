@@ -11,7 +11,7 @@ const url ={
   custAddress:BASEURL+'address/getCustAddress', //获取顾客的所有地址
   updateAddress:BASEURL+'address/update', //修改地址
   addAddress:BASEURL+'address/add', //添加地址
-  review:BASEURL+'review/add',   //评价
+  review:BASEURL+'admin/review/add',   //评价
   createOrder:BASEURL+'admin/order/add',//创建订单
   getShopInfo:BASEURL+'admin/shop/getCustLaundryShopList',
   cancelOrder:BASEURL+'admin/order/cancel', //取消订单

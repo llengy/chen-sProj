@@ -96,7 +96,6 @@ export default {
   },
   mounted:function () {
     this.myCart = this.$store.state.shopCart.mycart;
-
     this.myCart.forEach((data, index) => {
       this.totalPrice += data.price * data.total;
     });
@@ -145,7 +144,6 @@ export default {
     },
     // 去结算
     handleSettlement() {
-      console.log(this.totalPrice)
       if(this.myCart.length === 0) {
         this.$toast('请添加商品!')
         return

@@ -1,12 +1,18 @@
 <template>
   <main>
-    <mt-header fixed title="订单信息"></mt-header>
+    <mt-header fixed title="订单信息" >
+      <mt-button  slot="right" class="logout" v-if="!isLogin" @click="loginOrRegister">登录/注册</mt-button>
+    </mt-header>
     <section>
-      <div class="empty" v-if="isEmpty">
+      <div class="noLogin" v-if="!isLogin">
+        <img src="../../assets/noLogin.png" alt="">
+        <p>暂未登录, 赶快登录吧~</p>
+      </div>
+      <div class="empty" v-if="isLogin && isEmpty">
         <img src="../../assets/empty.png" alt="">
         <p>暂无订单,赶快下单吧~</p>
       </div>
-      <ul v-if="!isEmpty" class="flex">
+      <ul v-if="isLogin && !isEmpty" class="flex">
         <li class="flex-item" v-for="(item,index) in orderTotal" :key="index">
           <div class="top" @click="showDetail(item)">
             <p class="top-left">{{item.status}}</p>
@@ -69,11 +75,17 @@
         evaluationTxt: '',
         tabIndex: 0,
         orderTotal:[],
-        orderId:''
+        orderId:'',
+        isLogin:false
       }
     },
     created(){
       this.getOrderTotal();
+    },
+    mounted() {
+      if(JSON.stringify(this.$store.state.session.currentUser)!='{}'){
+        this.isLogin = !this.isLogin
+      }
     },
     methods: {
       switchEva(index) {
@@ -106,7 +118,6 @@
           if(0 === this.orderTotal.length){
             this.isEmpty = !this.isEmpty;
           }
-          // console.log(item.order_id);
         }else{
           this.$toast(response.data.desc)
         }
@@ -130,8 +141,13 @@
           if(this.$global.successCode === response.data.code){
             this.$toast("评价成功");
             this.isVisibale = !this.isVisibale;
-            // this.reload();
-            // this.$emit();
+            this.reload();
+            this.$router.push({
+              name: 'index',
+              params: {
+                sel: '订单'
+              }
+            })
           }else{
             this.$toast(response.data.desc);
           }
@@ -177,6 +193,7 @@
         }).then(response =>{
           if(this.$global.successCode == response.data.code){
           this.$toast("取消订单成功")
+          this.reload();
           this.refresh()
           }else{
           this.$toast(response.data.desc)
@@ -184,7 +201,10 @@
       },response => {
           this.$toast('找不到服务器!')
         })
-      }
+      },
+      loginOrRegister() {
+        this.$router.push('/login')
+      },
     }
   }
 </script>
@@ -199,6 +219,22 @@
       img{
         width: 408px;
         margin-top: 130px;
+      }
+      p{
+        margin-top: 80px;
+        font-size: 28px;
+        color: rgba(255, 255, 255, .5);
+        letter-spacing: 0;
+        text-align: center;
+      }
+    }
+    .noLogin{
+      text-align: center;
+      img{
+        width: 455px;
+        margin-top: 130px;
+        height: 334px;
+        margin-left: 100px;
       }
       p{
         margin-top: 80px;
@@ -304,6 +340,11 @@
         }
       }
     }
+  }
+  .logout{
+    font-size: 26px;
+    text-align: center;
+    color: #fff;
   }
   .mask{
     position: absolute;
