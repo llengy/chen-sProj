@@ -20,7 +20,6 @@
       <mt-tab-item id="订单">
         <img slot="icon" v-show="selected !=='订单'" src="../assets/icons/order.png">
         <img slot="icon" v-show="selected ==='订单'" src="../assets/icons/order-active.png">
-        <router-view :key="activeDate"/>
         订单
       </mt-tab-item>
       <mt-tab-item id="我的">
@@ -37,11 +36,6 @@ import indexPage from '@/views/tabs/indexPage'
 import ordersPage from '@/views/tabs/ordersPage'
 import userCenter from '@/views/tabs/userCenter'
 export default {
-  provide() {
-    return {
-      refresh: this.refresh
-    }
-  },
   components: {
     indexPage,
     ordersPage,
@@ -50,8 +44,6 @@ export default {
   data() {
     return {
       selected: '首页',
-      activeDate: 1
-
     }
   },
   mounted() {
@@ -68,10 +60,6 @@ export default {
   },
 
   methods:{
-    refresh() {
-      this.activeDate = new Date().getTime()
-    }
-
   }
 }
 </script>

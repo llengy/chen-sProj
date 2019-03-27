@@ -12,6 +12,8 @@
   "dependencies": {
     "axios": "^0.18.0",
     "cssnano": "^4.1.10",
+    "less": "^3.9.0",
+    "less-loader": "^4.1.0",
     "mint-ui": "^2.2.13",
     "normalize.css": "^8.0.1",
     "postcss-aspect-ratio-mini": "^1.0.1",

@@ -98,8 +98,8 @@ export default {
   },
   computed: {
     goods() {
-      console.log(this.$store.state.shopCart.mycart)
-      return this.$store.state.shopCart.mycart
+      this.shopMyCart = this.$store.state.shopCart.mycart
+      return this.shopMyCart
     },
     totalPrice() {
       let sum = 0
@@ -131,7 +131,7 @@ export default {
           shop_address: city
         }).then(response => {
           if (this.$global.successCode == response.data.code) {
-              console.log(response.data.data.rows)
+              // console.log(response.data.data.rows)
                 this.shopName = response.data.data.rows[0].shop_name;
                 this.shopNO = response.data.data.rows[0].shop_no
 
@@ -157,10 +157,11 @@ export default {
       this.sumPrice = this.totalPrice+this.serviceTip
       //创建订单
       let arr = [];
-      this.$store.state.shopCart.mycart.forEach(item => {
+      this.shopMyCart.forEach(item => {
         arr[arr.length] =JSON.stringify(item);
       });
       let goodsStr = arr.join(',')
+      // console.log(goodsStr)
       let param = {
         shopNO: this.shopNO,
         appointDate: this.pickTime,//预约取衣时间
@@ -189,7 +190,14 @@ export default {
     },
     pay(){
       //支付订单
-      console.log(this.sumPrice)
+      this.goodsIndirect = "";
+      console.log(this.shopMyCart)
+      for(let i=0;i<this.shopMyCart.length;i++){
+        this.goodsIndirect += this.shopMyCart[i].goods_name + "x" + this.shopMyCart[i].total+" "
+      }
+      this.goodsCart = this.goodsIndirect
+      console.log(this.goodsCart)
+      // console.log(this.sumPrice)
       this.$http.post(this.$Api.payPage,{
         //商户订单号
         WIDout_trade_no: this.orderId,
@@ -198,7 +206,7 @@ export default {
         //付款金额
         WIDtotal_amount: this.sumPrice,
         //商品描述
-        WIDbody: "",
+        WIDbody: this.goodsCart,
       }).then(response => {
 
         this.html = response.data
@@ -206,7 +214,7 @@ export default {
         // console.log(url)
 
         const div = document.createElement('div')
-        div.innerHTML = form//此处form就是后台返回接收到的数据
+        div.innerHTML = form   //此处form就是后台返回接收到的数据
         document.body.appendChild(div)
         document.forms[0].submit()
         //清空购物车
@@ -223,7 +231,7 @@ export default {
     },
     handleSel(event) {
       this.pickTime = this.formateMins(event)
-      console.log(this.pickTime)
+      // console.log(this.pickTime)
     },
     jump(path) {
       this.$router.push({

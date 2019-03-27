@@ -177,7 +177,7 @@
         }).then(response =>{
           if(this.$global.successCode == response.data.code){
           this.$toast("取消订单成功")
-          this.refresh()
+          this.reload()
           }else{
           this.$toast(response.data.desc)
         }

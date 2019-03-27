@@ -3,6 +3,7 @@ const url ={
   login:BASEURL+'login', //登录
   sendSms:BASEURL+'sendSMS', //发送验证码
   register:BASEURL+'register', //注册
+  updateCustomer:BASEURL+'customer/updateCustomer', //修改密码
   categoryList:BASEURL+'admin/cat/getCategoryList', //获取所有分类
   goodsList:BASEURL+'admin/goods/getGoodsList', //获取分类下的所有商品
   payPage:BASEURL+'jsp/alipay.trade.page.pay.jsp', //跳转支付页面

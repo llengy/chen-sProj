@@ -214,7 +214,7 @@
             }
           })
         }else {
-          this.$toast("验证超时")
+          this.$toast("验证超时!")
         }
 
       },
