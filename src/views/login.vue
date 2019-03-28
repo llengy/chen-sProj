@@ -206,12 +206,12 @@
             mobile:this.registerForm.tel,
             password:this.registerForm.passwd
           }).then(response => {
-            if(response.data !=0 ){
-              this.$toast("注册成功")
-              this.reload()
-            }else {
-              this.$toast("注册失败")
-            }
+              if (this.$global.successCode == response.data.code) {
+                this.$toast("注册成功")
+                this.reload()
+              } else {
+                this.$toast(response.data.desc);
+              }
           })
         }else {
           this.$toast("验证超时!")
