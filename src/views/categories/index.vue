@@ -307,11 +307,12 @@ export default {
       transform: translateX(-50%);
       box-shadow: 0 7px 13px 0 rgba(0,0,0,0.28);
       position: relative;
-      background: url('../../assets/bg03.png') no-repeat top /cover;
+      background: url('../../assets/bg03.png') no-repeat bottom;
+      background-size: 100%;
 
       .footer-left{
         width: 131.6px;
-        height: 148px;
+        height: 166px;
       }
       .footer-center{
         box-sizing: border-box;
