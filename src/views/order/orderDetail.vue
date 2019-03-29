@@ -76,7 +76,7 @@
                 </li>
                 <li class="timeline-item">
                   <i class="timeline-step" :class="orderDetail[0].takeBackDate ? 'check' : 'uncheck'"></i>
-                  <span class="timeline-btn" :class="orderDetail[0].takeBackDate ? 'check' : 'uncheck'">取回中</span>
+                  <span class="timeline-btn" :class="orderDetail[0].takeBackDate ? 'check' : 'uncheck'">已取回</span>
                   <p class="timeline-time">状态改变时间: {{orderDetail[0].takeBackDate}}</p>
                 </li>
                 <li class="timeline-item">
