@@ -310,6 +310,7 @@ export default {
       background: url('../../assets/bg03.png') no-repeat bottom;
       background-size: 100%;
 
+      
       .footer-left{
         width: 131.6px;
         height: 208px;
