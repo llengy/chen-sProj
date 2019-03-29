@@ -62,7 +62,7 @@
                   </li>
                   <li class="timeline-item">
                     <i class="timeline-step" :class="orderLast.takeBackDate ? 'check' : 'uncheck'"></i>
-                    <span class="timeline-btn" :class="orderLast.takeBackDate ? 'check' : 'uncheck'">取回中</span>
+                    <span class="timeline-btn" :class="orderLast.takeBackDate ? 'check' : 'uncheck'">已取回</span>
                     <p class="timeline-time">状态改变时间: {{orderLast.takeBackDate}}</p>
                   </li>
                   <li class="timeline-item">

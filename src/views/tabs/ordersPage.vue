@@ -27,8 +27,8 @@
               <p @click="cancelOrder(item)">取消订单</p>
               <p @click="payOrder(item)">立即支付</p>
             </div>
-            <div class="bottom-right flex" v-if="item.status === '待确认收衣'">
-              <p>确认收衣</p>
+            <div class="bottom-right flex" v-if="item.status === '待确认'">
+              <p @click="confirmOrder(item)">确认收衣</p>
             </div>
             <div class="bottom-right flex" v-if="item.status === '待评价'">
               <p class="eva-button" @click="showReview(item)">评价</p>
@@ -205,6 +205,21 @@
       loginOrRegister() {
         this.$router.push('/login')
       },
+      confirmOrder(item){
+        this.$http.post(this.$Api.confirmOrder,{
+          orderId:item.order_id,
+          confirm:'待评价'
+        }).then(response =>{
+          if(this.$global.successCode == response.data.code){
+          this.$toast("确认成功")
+          this.reload()
+        }else{
+          this.$toast(response.data.desc)
+        }
+      },response => {
+          this.$toast('找不到服务器!')
+        })
+      }
     }
   }
 </script>

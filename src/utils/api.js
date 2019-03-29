@@ -16,6 +16,7 @@ const url ={
   createOrder:BASEURL+'admin/order/add',//创建订单
   getShopInfo:BASEURL+'admin/shop/getCustLaundryShopList',
   cancelOrder:BASEURL+'admin/order/cancel', //取消订单
-  getOrderLastByCust:BASEURL+"admin/order/getOrderLastByCust" //获取顾客最新的订单信息
+  getOrderLastByCust:BASEURL+"admin/order/getOrderLastByCust", //获取顾客最新的订单信息
+  confirmOrder:BASEURL+'admin/order/handle'//确认收衣
 }
 export default url
