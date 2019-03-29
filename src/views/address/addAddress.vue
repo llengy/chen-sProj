@@ -58,6 +58,7 @@
         }
         if(this.$router.currentRoute.params.address){
           let updateParam = {
+            address : this.address,
             custId:this.$store.state.session.currentUser.cust_id,
             mobile:this.phone,
             recevier:this.username,
