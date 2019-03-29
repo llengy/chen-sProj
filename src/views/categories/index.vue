@@ -312,7 +312,7 @@ export default {
 
       .footer-left{
         width: 131.6px;
-        height: 166px;
+        height: 208px;
       }
       .footer-center{
         box-sizing: border-box;
