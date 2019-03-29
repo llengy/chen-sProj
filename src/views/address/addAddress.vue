@@ -42,49 +42,56 @@
       saveAddress(){
         if(this.address === ''){
           this.$toast('请输入地址');
-        }else if(this.username === ''){
+          return
+        }
+        if(this.username === ''){
           this.$toast('请输入收货人');
-        }else if(this.phone === ''){
+          return
+        }
+        if(this.phone === ''){
           this.$toast('请输入联系方式');
-        }else{
-          if(this.$router.currentRoute.params.address){
-            let updateParam = {
-              custId:this.$store.state.session.currentUser.cust_id,
-              mobile:this.phone,
-              recevier:this.username,
-              addressId:this.$router.currentRoute.params.address.address_id
-            }
-            this.$http.post(this.$Api.updateAddress,updateParam
-            ).then(response =>{
-              if(this.$global.successCode == response.data.code){
+          return
+        }
+        if (!/^((1[3,5,8][0-9])|(14[5,7])|(17[0,6,7,8])|(19[7]))\d{8}$/.test(this.phone)) {
+          this.$toast("手机格式不正确");
+          return
+        }
+        if(this.$router.currentRoute.params.address){
+          let updateParam = {
+            custId:this.$store.state.session.currentUser.cust_id,
+            mobile:this.phone,
+            recevier:this.username,
+            addressId:this.$router.currentRoute.params.address.address_id
+          }
+          this.$http.post(this.$Api.updateAddress,updateParam
+          ).then(response =>{
+            if(this.$global.successCode == response.data.code){
               this.$toast('修改成功');
               this.$router.back(-1);
             }else{
               this.$toast(response.data.desc);
             }
           },response=>{
-              this.$toast('找不到服务器');
-            })
-          }else{
-            let addParam = {
-              custId:this.$store.state.session.currentUser.cust_id,
-              address:this.address,
-              mobile:this.phone,
-              recevier:this.username
-            }
-            this.$http.post(this.$Api.addAddress,addParam
-            ).then(response =>{
-              if(this.$global.successCode == response.data.code){
+            this.$toast('找不到服务器');
+          })
+        }else{
+          let addParam = {
+            custId:this.$store.state.session.currentUser.cust_id,
+            address:this.address,
+            mobile:this.phone,
+            recevier:this.username
+          }
+          this.$http.post(this.$Api.addAddress,addParam
+          ).then(response =>{
+            if(this.$global.successCode == response.data.code){
               this.$toast('添加成功');
               this.$router.back(-1);
             }else{
               this.$toast(response.data.desc);
             }
           },response=>{
-              this.$toast('找不到服务器');
-            })
-
-          }
+            this.$toast('找不到服务器');
+          })
         }
       }
     }

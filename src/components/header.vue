@@ -18,6 +18,9 @@ export default {
   data() {
     return {}
   },
+  mounted(){
+    // this.goBack()
+  },
   methods: {
     goBack() {
       this.$router.push({name: this.headers.path, params: {sel: this.headers.tabname}})

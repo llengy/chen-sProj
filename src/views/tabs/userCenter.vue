@@ -155,7 +155,7 @@
           custId:this.$store.state.session.currentUser.cust_id
         }).then(response =>{
           if(this.$global.successCode == response.data.code){
-          console.log(response.data.data)
+          // console.log(response.data.data)
           this.orderLast = response.data.data;
         }else{
           this.$toast(response.data.desc)

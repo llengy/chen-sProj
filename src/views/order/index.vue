@@ -86,8 +86,8 @@ export default {
       pickerValue: new Date(),
       startHour: 7,
       endHour: 23,
-      startDate: new Date('2019'),
-      endDate: new Date('2019-03-26'),
+      startDate: new Date(),
+      endDate: new Date(),
       pickTime: '',
       address: '',
       shopName: '',
@@ -196,7 +196,7 @@ export default {
         this.goodsIndirect += this.shopMyCart[i].goods_name + "x" + this.shopMyCart[i].total+" "
       }
       this.goodsCart = this.goodsIndirect
-      console.log(this.goodsCart)
+      // console.log(this.goodsCart)
       // console.log(this.sumPrice)
       this.$http.post(this.$Api.payPage,{
         //商户订单号
