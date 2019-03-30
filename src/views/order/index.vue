@@ -147,12 +147,12 @@ export default {
     },
     createOrder(){
       //确认输入信息
-      if(this.pickTime === '') {
-        this.$toast('请选择取衣时间')
+      if(!this.address) {
+        this.$toast('请选择地址')
         return
       }
-      if(this.address === '') {
-        this.$toast('请选择地址')
+      if(!this.pickTime) {
+        this.$toast('请选择取衣时间')
         return
       }
       this.sumPrice = this.totalPrice+this.serviceTip
@@ -227,8 +227,10 @@ export default {
     },
     openPicker() {
       let end = this.formateDate(new Date().getTime() + 7 * 24 * 60 * 60 * 1000)
-      this.endDate = new Date(end)
-      this.$refs.picker.open()
+      if(end){
+        this.endDate = new Date(end)
+        this.$refs.picker.open()
+      }
     },
     handleSel(event) {
       this.pickTime = this.formateMins(event)
