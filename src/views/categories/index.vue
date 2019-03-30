@@ -226,12 +226,10 @@ export default {
     setGoodsTotal(){
       if(this.myCart && this.categoryList && this.goodsObj){
         for(let i = 0;i<this.categoryList.length;i++){
-          let len = Object.prototype.toString.call(this.goodsObj[this.categoryList[i].cat_no]).length
-          for(let j = 0;j<len;j++){
+          for(let j = 0;j<this.goodsObj[this.categoryList[i].cat_no].length;j++){
             for(let k=0;k<this.myCart.length;k++){
-              if(this.myCart[k].goods_no == this.goodsObj[this.categoryList[i].cat_no][j].goods_no){
+              if(this.myCart[k].goods_no === this.goodsObj[this.categoryList[i].cat_no][j].goods_no){
                 this.$set(this.goodsObj[this.categoryList[i].cat_no][j], "total",this.myCart[k].total)
-                break
               }
             }
           }
@@ -242,12 +240,10 @@ export default {
     //清空商品图选中的数量
     clearGoodsTotal(){
       for(let i = 0;i<this.categoryList.length;i++){
-        let len = Object.prototype.toString.call(this.goodsObj[this.categoryList[i].cat_no]).length
-        for(let j = 0;j<len;j++){
+        for(let j = 0;j<this.goodsObj[this.categoryList[i].cat_no].length;j++){
           for(let k=0;k<this.myCart.length;k++){
-            if(this.myCart[k].goods_no == this.goodsObj[this.categoryList[i].cat_no][j].goods_no){
+            if(this.myCart[k].goods_no === this.goodsObj[this.categoryList[i].cat_no][j].goods_no){
               this.$set(this.goodsObj[this.categoryList[i].cat_no][j], "total",  0)
-              break
             }
           }
         }
