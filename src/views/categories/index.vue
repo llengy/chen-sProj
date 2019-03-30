@@ -206,6 +206,7 @@ export default {
         total = total + (item.total * item.price)
       });
       this.totalPrice = total
+      this.setGoodsTotal();
     },
     //添加商品
     handleSum(item) {
@@ -219,6 +220,7 @@ export default {
         total = total + (data.total * data.price)
       });
       this.totalPrice = total
+      this.setGoodsTotal()
     },
     //设置商品图选中的数量
     setGoodsTotal(){
@@ -310,9 +312,10 @@ export default {
       background: url('../../assets/bg03.png') no-repeat bottom;
       background-size: 100%;
 
+
       .footer-left{
         width: 131.6px;
-        height: 166px;
+        height: 208px;
       }
       .footer-center{
         box-sizing: border-box;
