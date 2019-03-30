@@ -6,7 +6,7 @@ const url ={
   updateCustomer:BASEURL+'customer/updateCustomer', //修改密码
   categoryList:BASEURL+'admin/cat/getCategoryList', //获取所有分类
   goodsList:BASEURL+'admin/goods/getGoodsList', //获取分类下的所有商品
-  payPage:BASEURL+'jsp/alipay.trade.page.pay.jsp', //跳转支付页面
+  payPage:BASEURL+'jsp/alipay.trade.wap.pay.jsp', //跳转支付页面
   orderDetail:BASEURL+'admin/order/getOrderDetail', //订单详情
   orderTotal:BASEURL+'admin/order/getOrderTotal', //订单概览
   custAddress:BASEURL+'address/getCustAddress', //获取顾客的所有地址
