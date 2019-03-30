@@ -66,8 +66,8 @@
                     <p class="timeline-time">状态改变时间: {{orderLast.takeBackDate}}</p>
                   </li>
                   <li class="timeline-item">
-                    <i class="timeline-step uncheck" :class="orderLast.confirmDate ? 'check' : 'uncheck'"></i>
-                    <span class="timeline-btn uncheck" :class="orderLast.confirmDate ? 'check' : 'uncheck'">待确认</span>
+                    <i class="timeline-step" :class="orderLast.confirmDate ? 'check' : 'uncheck'"></i>
+                    <span class="timeline-btn" :class="orderLast.confirmDate ? 'check' : 'uncheck'">待确认</span>
                     <p class="timeline-time">状态改变时间: {{orderLast.confirmDate}} </p>
                   </li>
                   <li class="timeline-item">
