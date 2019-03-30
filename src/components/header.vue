@@ -1,5 +1,5 @@
 <template>
-  <mt-header fixed  :title="headers.title">
+  <mt-header fixed :title="headers.title">
     <div @click="goBack" slot="left">
       <mt-button icon="back"></mt-button>
     </div>

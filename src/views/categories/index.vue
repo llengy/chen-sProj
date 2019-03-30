@@ -75,19 +75,19 @@ export default {
       },
       selected: '',
       subAcitve: 0,
-      goodsObj:{},
+      goodsObj:[],
       myCart:[]
     }
   },
-  beforeRouteEnter (to, from, next) {
-    next(vm => {
-      // if(vm.$router.currentRoute.params.sel) {
-      //   vm.selected = vm.$router.currentRoute.params.sel
-      // }else{
-      //   vm.selected = vm.categoryList[0].cat_no;
-      // }
-    })
-  },
+  // beforeRouteEnter (to, from, next) {
+  //   next(vm => {
+  //     if(vm.$router.currentRoute.params.sel) {
+  //       vm.selected = vm.$router.currentRoute.params.sel
+  //     }else{
+  //       vm.selected = vm.categoryList[0].cat_no;
+  //     }
+  //   })
+  // },
   computed:{
 
   },
@@ -169,22 +169,22 @@ export default {
         this.$set(this.goodsObj[item.cat_no][index], "total", total)
       }
       // console.log(item);
+      // console.log(index);
       // 加入到购物车
-      Array.prototype.indexOf = function(val) {
-        // console.log(val);
-        for (let i = 0; i < this.length; i++) {
-          if (this[i].goods_no == val) return i;
-        }
-        return -1;
-      }
-      if(this.myCart.length === 0) {
-        this.myCart.push(item)
-      } else {
-        let indexOf = this.myCart.indexOf(item.goods_no)
-        if(indexOf < 0) {
+      // Array.prototype.indexOf = function(val) {
+      //   for (let i = 0; i < this.length; i++) {
+      //     if (this[i].goods_no == val) return i;
+      //   }
+      //   return -1;
+      // }
+        if(this.myCart.length === 0) {
           this.myCart.push(item)
-        }
-      }
+        } else {
+          let indexOf = this.myCart.indexOf(item.goods_no)
+          if(indexOf < 0) {
+            this.myCart.push(item)
+          }
+       }
     },
     toggleCart() {
       this.popupVisible = !this.popupVisible

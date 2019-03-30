@@ -96,6 +96,7 @@ export default {
 
     }
   },
+
   computed: {
     goods() {
       this.shopMyCart = this.$store.state.shopCart.mycart
