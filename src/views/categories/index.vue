@@ -75,7 +75,7 @@ export default {
       },
       selected: '',
       subAcitve: 0,
-      goodsObj:[],
+      goodsObj:{},
       myCart:[]
     }
   },
@@ -185,6 +185,7 @@ export default {
             this.myCart.push(item)
           }
        }
+      this.$store.commit('UPDATE_CART', this.myCart)
     },
     toggleCart() {
       this.popupVisible = !this.popupVisible
@@ -206,6 +207,7 @@ export default {
         total = total + (item.total * item.price)
       });
       this.totalPrice = total
+      this.$store.commit('UPDATE_CART', this.myCart)
       this.setGoodsTotal();
     },
     //添加商品
@@ -220,6 +222,7 @@ export default {
         total = total + (data.total * data.price)
       });
       this.totalPrice = total
+      this.$store.commit('UPDATE_CART', this.myCart)
       this.setGoodsTotal()
     },
     //设置商品图选中的数量
